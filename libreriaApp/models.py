@@ -1,0 +1,82 @@
+"""El modelo es el que crea las tablas de la base de datos relacional donde se almacena la informacion
+del sistema"""
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+  
+# Create your models here.
+class Usuario(AbstractUser):
+    rut=models.CharField(max_length=10,unique=True)
+
+class Autor(models.Model):
+    idAutor=models.CharField(max_length=20,unique=True)
+    nombreAutor=models.CharField(max_length=150)
+    apellidoAutor=models.CharField(max_length=150)
+    biografiaAutor=models.TextField(max_length=2500,blank=True)
+
+class Libro(models.Model):
+    idLibro=models.CharField(max_length=20,unique=True)
+    titulo=models.CharField(max_length=200)
+    imagen=models.BinaryField(null=True,blank=True,editable=True)
+    autorlibro=models.ForeignKey(Autor,on_delete=models.CASCADE)
+    tematica=models.CharField(max_length=150)
+    editorial=models.CharField(max_length=150)
+    edicion=models.CharField(max_length=150)
+    fechaDePublicacion=models.DateField()
+    cantidad=models.IntegerField()
+    precio=models.DecimalField(max_digits=5,decimal_places=2)
+    disponible=models.BooleanField(default=False)
+
+
+class Perfil(models.Model):
+    usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE) 
+    biografiaPerfil=models.TextField(max_length=2500)
+    areasDeInteres=models.CharField(max_length=1000)
+    librosLeidos=models.ManyToManyField(Libro,blank=True,related_name='libros_leidos')  
+    
+class CarroDeCompra(models.Model):
+    usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE)
+    librosAcomprar=models.ManyToManyField(Libro,blank=True)
+
+class Post(models.Model):
+    usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
+    idPost=models.CharField(max_length=20,unique=True)
+    contenidoPost=models.TextField(max_length=15000)
+    timestampPost=models.DateTimeField(auto_now_add=True)
+    modificacion_timestampPost=models.DateField(auto_now=True)
+
+class Comentario(models.Model):
+    usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE)
+    idComentario=models.CharField(max_length=20,unique=True)
+    contenidoComentario=models.TextField(max_length=1000)
+    timestampComentario=models.DateTimeField(auto_now_add=True)
+    modificacion_timestampComentario=models.DateField(auto_now=True)
+
+class Reporte(models.Model):
+    ESTADOS=(
+        ('PENDIENTE','Pendiente'),
+        ('RESUELTO','Resuelto')
+    )
+    usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True,blank=True)
+    comentario=models.ForeignKey(Comentario,on_delete=models.CASCADE,null=True,blank=True)
+    idReporte=models.CharField(max_length=20,unique=True)
+    motivoReporte=models.CharField(max_length=1000)
+    estadoReporte=models.CharField(max_length=10,choices=ESTADOS,default='PENDIENTE')
+    timestampReporte=models.DateTimeField(auto_now_add=True)
+    modificacion_timestampReporte=models.DateField(auto_now=True)
+
+class Notificacion(models.Model):
+    TIPO=(
+        ('AVISOS','avisos'),
+        ('NUEVO COMENTARIO','nuevo comentario'),
+        ('REPORTE','reporte')
+    )
+    usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True,blank=True)
+    comentario=models.ForeignKey(Comentario,on_delete=models.CASCADE,null=True,blank=True)
+    idNotificacion=models.CharField(max_length=20,unique=True)
+    tipoNotificacion=models.CharField(max_length=17,choices=TIPO,default='AVISOS')
+    mensajeNotificacion=models.TextField(max_length=1000)
+    estadoVista=models.BooleanField(default=False)
