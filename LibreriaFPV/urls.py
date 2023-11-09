@@ -27,6 +27,7 @@ urlpatterns = [
     path('logout/', views.cerrar_sesion, name='logout'),
     path('perfil/', views.perfil, name='perfil'),
     path('perfiladmin/', views.perfil_admin, name='perfiladmin'),
+    path('catalogolibros/',views.catalogo, name='catalogolibros'),
 
 
 

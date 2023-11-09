@@ -24,6 +24,11 @@ def add_libro(request):
         form=LibroRegistroForm()
     return render(request,'TEMPLATE DE REGISTRO',{'form':form})
 
+#Listar libros del catalogo en el template del catalogo
+def catalogo(request):
+    libros = Libro.objects.all()
+    return render(request, 'catalogo.html', {'libros': libros})
+
 #Registrarse como usuario                 
 def registrarse(request):
     form=UsuarioRegistroForm()
