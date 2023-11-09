@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -30,8 +30,9 @@ def catalogo(request):
     return render(request, 'catalogo.html', {'libros': libros})
 
 #Ver Libro del catalogo
-def ver_libro(request):
-    return render(request, 'libro.html')
+def ver_libro(request, libro_id):
+    libro=get_object_or_404(Libro, pk=libro_id)
+    return render(request, 'libro.html', {'libro':libro})
 
 #Registrarse como usuario                 
 def registrarse(request):

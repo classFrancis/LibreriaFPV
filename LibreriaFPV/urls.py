@@ -28,7 +28,7 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('perfiladmin/', views.perfil_admin, name='perfiladmin'),
     path('catalogolibros/',views.catalogo, name='catalogolibros'),
-    path('verlibro/',views.ver_libro, name='verlibro')
+    path('verlibro/<int:libro_id>/',views.ver_libro, name='verlibro')
 
 
 
