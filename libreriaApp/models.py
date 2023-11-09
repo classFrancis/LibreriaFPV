@@ -9,13 +9,11 @@ class Usuario(AbstractUser):
     rut=models.CharField(max_length=10,unique=True)
 
 class Autor(models.Model):
-    idAutor=models.CharField(max_length=20,unique=True)
     nombreAutor=models.CharField(max_length=150)
     apellidoAutor=models.CharField(max_length=150)
     biografiaAutor=models.TextField(max_length=2500,blank=True)
 
 class Libro(models.Model):
-    idLibro=models.CharField(max_length=20,unique=True)
     titulo=models.CharField(max_length=200)
     imagen=models.BinaryField(null=True,blank=True,editable=True)
     autorlibro=models.ForeignKey(Autor,on_delete=models.CASCADE)
@@ -40,7 +38,6 @@ class CarroDeCompra(models.Model):
 
 class Post(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
-    idPost=models.CharField(max_length=20,unique=True)
     contenidoPost=models.TextField(max_length=15000)
     timestampPost=models.DateTimeField(auto_now_add=True)
     modificacion_timestampPost=models.DateField(auto_now=True)
@@ -48,7 +45,6 @@ class Post(models.Model):
 class Comentario(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
     post=models.ForeignKey(Post,on_delete=models.CASCADE)
-    idComentario=models.CharField(max_length=20,unique=True)
     contenidoComentario=models.TextField(max_length=1000)
     timestampComentario=models.DateTimeField(auto_now_add=True)
     modificacion_timestampComentario=models.DateField(auto_now=True)
@@ -61,7 +57,6 @@ class Reporte(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
     post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True,blank=True)
     comentario=models.ForeignKey(Comentario,on_delete=models.CASCADE,null=True,blank=True)
-    idReporte=models.CharField(max_length=20,unique=True)
     motivoReporte=models.CharField(max_length=1000)
     estadoReporte=models.CharField(max_length=10,choices=ESTADOS,default='PENDIENTE')
     timestampReporte=models.DateTimeField(auto_now_add=True)
@@ -76,7 +71,6 @@ class Notificacion(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
     post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True,blank=True)
     comentario=models.ForeignKey(Comentario,on_delete=models.CASCADE,null=True,blank=True)
-    idNotificacion=models.CharField(max_length=20,unique=True)
     tipoNotificacion=models.CharField(max_length=17,choices=TIPO,default='AVISOS')
     mensajeNotificacion=models.TextField(max_length=1000)
     estadoVista=models.BooleanField(default=False)

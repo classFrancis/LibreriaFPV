@@ -10,6 +10,7 @@ from django.http import HttpResponse
 def index(request):
     return render(request,'index.html')
 
+#Agregar un libro
 def add_libro(request):
     form=LibroRegistroForm()
     if request.method=='POST':
@@ -23,7 +24,7 @@ def add_libro(request):
         form=LibroRegistroForm()
     return render(request,'TEMPLATE DE REGISTRO',{'form':form})
 
-#Registrarse como usuario            
+#Registrarse como usuario                 
 def registrarse(request):
     form=UsuarioRegistroForm()
     if request.method=='POST':

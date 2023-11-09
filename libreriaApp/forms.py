@@ -32,15 +32,25 @@ class UsuarioRegistroForm(UserCreationForm):
             perfil.save()
         return usuario
 
-#Registra un libro en el sistema 
-class LibroRegistroForm(forms.ModelFormForm):
+#Registra un Autor en el sistema
+class AutorRegistroForm(forms.ModelForm):
     class Meta:
-        model = Libro
-        fields = '__all__'
+        model=Autor
+        fields='__all__'
 
-    idLibro=forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ID del Libro'}),label="")
+    nombreAutor=forms.CharField(max_length=150,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre Autor'}),label="")
+    apellidoAutor=forms.CharField(max_length=150,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido Autor'}),label="")
+    biografiaAutor=forms.CharField(max_length=5000,widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Biografia'}),label="")
+
+#Registra un Libro en el sistema 
+class LibroRegistroForm(forms.ModelForm):
+    class Meta:
+        model=Libro
+        fields='__all__'
+
     titulo=forms.CharField(max_length=200,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título'}),label="")
     autorlibro=forms.ModelChoiceField(queryset=Autor.objects.all(),widget=forms.Select(attrs={'class': 'form-control'}),label="")
+    tematica=forms.CharField(max_length=150,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'tematica'}),label="")
     editorial=forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Editorial'}),label="")
     edicion=forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Edición'}),label="")
     fechaDePublicacion=forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),label="")
@@ -65,4 +75,4 @@ class LibroRegistroForm(forms.ModelFormForm):
             libro.save()
         return libro
 
-
+#
