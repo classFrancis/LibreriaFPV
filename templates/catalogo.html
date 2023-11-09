@@ -9,6 +9,39 @@
     <title>Catalogo de libros disponibles</title>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary"><!--Nav-->
+        <div class="container-fluid">
+            <form class="d-flex" role="search" style="position: start;margin-top: 5px;" >
+                <a class="btn btn-outline-success" href="{% url 'login' %}" type="submit" style="margin-right: 5px;">Login</a> 
+            </form>
+            <form>
+                <a class="btn btn-outline-success" href="{% url 'catalogolibros' %}" type="submit">Ver catalogo</a>
+                <!-- Button trigger modal carro  -->
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#carrodecomprasmodal">
+                  Carrito de compras
+                </button>
+                <!-- Modal carro -->
+                <div class="modal fade modal-xl" id="carrodecomprasmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="carrodecomprasmodalLabel">Carro de compras</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        ...
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!--End modal carro-->
+            </form>
+          </div>
+        </div>
+      </nav><!--End navbar-->
 
     <div id="carouselExampleCaptions" class="carousel slide"><!--Banner-->
         <div class="carousel-inner">
@@ -36,7 +69,7 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
-    </div>
+    </div><!--End banner-->
     {% block content %}
     <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Libros Disponibles</h5>
     <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
@@ -58,7 +91,7 @@
     </div>
     {% endblock %}
     </div>
-    </label>
+    </label><!--End lista productos-->
     <div class="container-fluid text-center"><!-- Grid -->
         <div class="row">
           <div class="col">

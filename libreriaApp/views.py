@@ -29,6 +29,10 @@ def catalogo(request):
     libros = Libro.objects.all()
     return render(request, 'catalogo.html', {'libros': libros})
 
+#Ver Libro del catalogo
+def ver_libro(request):
+    return render(request, 'libro.html')
+
 #Registrarse como usuario                 
 def registrarse(request):
     form=UsuarioRegistroForm()
