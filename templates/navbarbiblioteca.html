@@ -1,5 +1,5 @@
 <!-- ESTE ES UN TEMPLATE HECHO NETAMENTE PARA HEREDAR EL NAVBAR A OTROS TEMPLATE RELACIONADOS CON LA BIOBLIOTECA NO EL FORO -->
-<!-- AQUI ESTARA EL UNICO MODAL QUE ME VOY A DAR EL TRABAJO DE HACER FUNCIONAR, DICESE EL DEL CARRO DE COMPRAS -->
+<!-- AQUI ESTARA EL UNICO MODAL QUE ME VOY A DAR EL TRABAJO DE HACER FUNCIONAR (por ahora muajaja), DICESE EL DEL CARRO DE COMPRAS -->
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -35,13 +35,22 @@
                       </div>
                       <div class="modal-body">
                         {% if libros_en_carro %}
-                          <ul class="list-group">
+                          <ul class="list-group ">
                             {% for libro in libros_en_carro %}
-                              <li class="list-group-item">
-                                {{ libro.titulo }} - {{ libro.precio }}
-                                <!-- Agrega aquí más detalles que quieras mostrar -->
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ libro.titulo }} - ${{ libro.precio }}
+                                <a href="#" class="btn btn-success btn-sm" style="margin-inline-start: auto ;margin-right: 5px;">
+                                  <i class="bi bi-plus-circle"></i>
+                                </a>
+                                <a href="#" class="btn btn-danger btn-sm">
+                                  <i class="bi bi-dash-circle"></i>
+                                </a>
                               </li>
+                              
                             {% endfor %}
+                            <label class="alert alert-success" role="alert">
+                              <h5>Precio total: ${{ total_precio }}</h5>
+                            </label>
                           </ul>
                         {% else %}
                           <p>No hay libros en tu carro.</p>

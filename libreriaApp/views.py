@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
@@ -25,7 +26,8 @@ def add_libro(request):
         form=LibroRegistroForm()
     return render(request,'TEMPLATE DE REGISTRO',{'form':form})
 
-#Agregar libro al carro de compras con la ayuda de dios
+#Agregar libro al carro de compras como usuario registrado
+#Obtener total del carro
 @login_required
 @require_POST
 def agregar_al_carro(request, libro_id):
@@ -33,6 +35,7 @@ def agregar_al_carro(request, libro_id):
     carro, created = CarroDeCompra.objects.get_or_create(usuario=request.user)
     carro.librosAcomprar.add(libro)
     return redirect('catalogolibros')
+
 
 #Listar libros del catalogo en el template del catalogo
 def catalogo(request):
@@ -94,7 +97,7 @@ def login_usuario(request):
         
     return render(request,'login.html',{'form':form,'user_message':user_message})
 
-#Cerrar sesion
+#Cerrar sesion de usuario
 def cerrar_sesion(request):
     logout(request)
     return redirect(reverse('login')+"?message=Has cerrado sesión correctamente.")

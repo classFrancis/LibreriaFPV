@@ -35,6 +35,8 @@ class Perfil(models.Model):
 class CarroDeCompra(models.Model):
     usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE)
     librosAcomprar=models.ManyToManyField(Libro,blank=True)
+    totalPrecio=models.DecimalField(max_digits=6,decimal_places=2,default=0.00)
+
 
 class Post(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
