@@ -3,6 +3,7 @@ from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.urls import reverse
 from django.http import HttpResponse
 
@@ -10,7 +11,7 @@ from django.http import HttpResponse
 def index(request):
     return render(request,'index.html')
 
-#Agregar un libro
+#Agregar un libro al sistema
 def add_libro(request):
     form=LibroRegistroForm()
     if request.method=='POST':
@@ -23,6 +24,15 @@ def add_libro(request):
     else:
         form=LibroRegistroForm()
     return render(request,'TEMPLATE DE REGISTRO',{'form':form})
+
+#Agregar libro al carro de compras con la ayuda de dios
+@login_required
+@require_POST
+def agregar_al_carro(request, libro_id):
+    libro = get_object_or_404(Libro, id=libro_id)
+    carro, created = CarroDeCompra.objects.get_or_create(usuario=request.user)
+    carro.librosAcomprar.add(libro)
+    return redirect('catalogolibros')
 
 #Listar libros del catalogo en el template del catalogo
 def catalogo(request):

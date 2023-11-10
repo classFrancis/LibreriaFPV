@@ -28,7 +28,8 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('perfiladmin/', views.perfil_admin, name='perfiladmin'),
     path('catalogolibros/',views.catalogo, name='catalogolibros'),
-    path('verlibro/<int:libro_id>/',views.ver_libro, name='verlibro')
+    path('verlibro/<int:libro_id>/',views.ver_libro, name='verlibro'),
+    path('carro/agregar/<int:libro_id>/', views.agregar_al_carro, name='agregar_al_carro'),
 
 
 

@@ -4,6 +4,7 @@ validaciones de entrada de datos"""
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import *
+from django.db import transaction
 
 #Login
 class UsuarioLoginForm(AuthenticationForm):
@@ -17,19 +18,24 @@ class UsuarioRegistroForm(UserCreationForm):
         fields=('first_name','last_name','email','rut','username')
     
     first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre'}),label="")    
-    last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Apellifo'}),label="")  
+    last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Apellido'}),label="")  
     email=forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'}),label="")  
     rut=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'rut'}),label="")
     username=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de Usuario'}),label="")
     password1=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}),label="")
     password2=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirmar Password'}),label="")
-
+    
+    #Esta funcion guarda el usuario y le asocia un perfil y un carro de compras unico
     def save(self,commit=True):
-        usuario=super().save(commit=False)
-        if commit:
-            usuario.save()
-            perfil=Perfil(usuario=usuario)
-            perfil.save()
+        """Aqui se usa una 'transacción atómica' para evitar inconsistencias en la base de datos
+        en caso de que algo falle durante el proceso de guardado, asi si ocurre
+        una excepcion los datos no se almacenan en la base de datos"""
+        with transaction.atomic():
+            usuario=super().save(commit=False)
+            if commit:
+                usuario.save()
+                Perfil.objects.create(usuario=usuario)
+                CarroDeCompra.objects.create(usuario=usuario)
         return usuario
 
 #Registra un Autor en el sistema
