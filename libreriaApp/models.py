@@ -25,18 +25,21 @@ class Libro(models.Model):
     precio=models.DecimalField(max_digits=5,decimal_places=2)
     disponible=models.BooleanField(default=False)
 
+class CarroDeCompra(models.Model):
+    usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE)
+    librosAcomprar=models.ManyToManyField(Libro,through='ItemCarro',blank=True)
+    totalPrecio=models.DecimalField(max_digits=6,decimal_places=2,default=0.00)
+
+class ItemCarro(models.Model):
+    carro=models.ForeignKey(CarroDeCompra,on_delete=models.CASCADE)
+    libro=models.ForeignKey(Libro,on_delete=models.CASCADE)
+    cantidad=models.IntegerField(default=1) 
 
 class Perfil(models.Model):
     usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE) 
     biografiaPerfil=models.TextField(max_length=2500)
     areasDeInteres=models.CharField(max_length=1000)
-    librosLeidos=models.ManyToManyField(Libro,blank=True,related_name='libros_leidos')  
-    
-class CarroDeCompra(models.Model):
-    usuario=models.OneToOneField(Usuario,on_delete=models.CASCADE)
-    librosAcomprar=models.ManyToManyField(Libro,blank=True)
-    totalPrecio=models.DecimalField(max_digits=6,decimal_places=2,default=0.00)
-
+    librosLeidos=models.ManyToManyField(Libro,blank=True,related_name='libros_leidos') 
 
 class Post(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)

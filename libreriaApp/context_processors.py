@@ -1,13 +1,13 @@
-from .models import CarroDeCompra
-from django.db.models import Sum
+from .models import CarroDeCompra,ItemCarro
+from django.db.models import Sum, F
 
 
 def carro_compras(request):
     if request.user.is_authenticated:
         carro, created = CarroDeCompra.objects.get_or_create(usuario=request.user)
-        libros_en_carro = carro.librosAcomprar.all()
-        total_precio = libros_en_carro.aggregate(Sum('precio'))['precio__sum'] or 0
+        items_en_carro = ItemCarro.objects.filter(carro=carro)
+        total_precio = items_en_carro.annotate(total_item=F('libro__precio') * F('cantidad')).aggregate(Sum('total_item'))['total_item__sum'] or 0
     else:
-        libros_en_carro = []
+        items_en_carro = []
         total_precio = 0
-    return {'libros_en_carro': libros_en_carro,'total_precio': total_precio,}
+    return {'items_en_carro': items_en_carro, 'total_precio': total_precio}    

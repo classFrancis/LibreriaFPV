@@ -1,4 +1,5 @@
 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
@@ -30,10 +31,13 @@ def add_libro(request):
 @login_required
 @require_POST
 def agregar_al_carro(request, libro_id):
-    libro = get_object_or_404(Libro, id=libro_id)
-    carro, created = CarroDeCompra.objects.get_or_create(usuario=request.user)
-    carro.librosAcomprar.add(libro)
-    return redirect('catalogolibros')
+    libro=get_object_or_404(Libro,id=libro_id)
+    carro,created=CarroDeCompra.objects.get_or_create(usuario=request.user)
+    item,created=ItemCarro.objects.get_or_create(carro=carro,libro=libro)
+    if not created:
+        item.cantidad+=1
+        item.save()
+    return JsonResponse({'status': 'success'})
 
 #Eliminar libro del carro de compras como usuario registrado
 @login_required
@@ -42,17 +46,17 @@ def eliminar_del_carro(request, libro_id):
     libro=get_object_or_404(Libro, id=libro_id)
     carro=get_object_or_404(CarroDeCompra,usuario=request.user)
     carro.librosAcomprar.remove(libro)
-    return redirect('catalogolibros')
+    return JsonResponse({'status': 'success'})
 
-#Vaciar carro de compras
+#Vaciar carro de compras como usuario registrado
 @login_required
 @require_POST
 def vaciar_carro(request):
     carro = get_object_or_404(CarroDeCompra, usuario=request.user)
-    carro.librosAcomprar.clear()  # Esto elimina todos los libros del carro
-    carro.totalPrecio = 0.00  # Resetea el precio total a 0
+    carro.librosAcomprar.clear() 
+    carro.totalPrecio = 0.00  
     carro.save()
-    return redirect('catalogolibros') 
+    return JsonResponse({'status': 'success'})
 
 #Listar libros del catalogo en el template del catalogo
 def catalogo(request):
