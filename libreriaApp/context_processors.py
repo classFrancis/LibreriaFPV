@@ -1,6 +1,7 @@
 from .models import CarroDeCompra
 from django.db.models import Sum
 
+
 def carro_compras(request):
     if request.user.is_authenticated:
         carro, created = CarroDeCompra.objects.get_or_create(usuario=request.user)

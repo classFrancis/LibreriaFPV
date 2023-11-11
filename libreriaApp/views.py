@@ -27,7 +27,6 @@ def add_libro(request):
     return render(request,'TEMPLATE DE REGISTRO',{'form':form})
 
 #Agregar libro al carro de compras como usuario registrado
-#Obtener total del carro
 @login_required
 @require_POST
 def agregar_al_carro(request, libro_id):
@@ -36,6 +35,24 @@ def agregar_al_carro(request, libro_id):
     carro.librosAcomprar.add(libro)
     return redirect('catalogolibros')
 
+#Eliminar libro del carro de compras como usuario registrado
+@login_required
+@require_POST
+def eliminar_del_carro(request, libro_id):
+    libro=get_object_or_404(Libro, id=libro_id)
+    carro=get_object_or_404(CarroDeCompra,usuario=request.user)
+    carro.librosAcomprar.remove(libro)
+    return redirect('catalogolibros')
+
+#Vaciar carro de compras
+@login_required
+@require_POST
+def vaciar_carro(request):
+    carro = get_object_or_404(CarroDeCompra, usuario=request.user)
+    carro.librosAcomprar.clear()  # Esto elimina todos los libros del carro
+    carro.totalPrecio = 0.00  # Resetea el precio total a 0
+    carro.save()
+    return redirect('catalogolibros') 
 
 #Listar libros del catalogo en el template del catalogo
 def catalogo(request):

@@ -35,23 +35,45 @@
                       </div>
                       <div class="modal-body">
                         {% if libros_en_carro %}
-                          <ul class="list-group ">
-                            {% for libro in libros_en_carro %}
-                              <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ libro.titulo }} - ${{ libro.precio }}
-                                <a href="#" class="btn btn-success btn-sm" style="margin-inline-start: auto ;margin-right: 5px;">
-                                  <i class="bi bi-plus-circle"></i>
-                                </a>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                  <i class="bi bi-dash-circle"></i>
-                                </a>
-                              </li>
-                              
-                            {% endfor %}
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Agregar/Eliminar</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for libro in libros_en_carro %}
+                                <tr>
+                                  <td>{{ libro.titulo }}</td> 
+                                  <td>${{ libro.precio }}</td>
+                                  <td></td>
+                                  <td>
+                                    <form action="{% url 'eliminar_del_carro' libro.id %}" method="post">
+                                      {% csrf_token %}
+                                      <a class="btn btn-success btn-sm" href="#">
+                                        <i class="bi bi-plus-square"></i>
+                                      </a>
+                                      <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash-fill"></i>
+                                      </button>
+                                    </form>
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
                             <label class="alert alert-success" role="alert">
                               <h5>Precio total: ${{ total_precio }}</h5>
                             </label>
-                          </ul>
+                            <form class="d-flex justify-content-between align-items-center" action="{% url 'vaciar_carro' %}" method="post" >
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-danger btn-sm" style="margin-inline-start: auto;">
+                                <i class="bi bi-trash-fill">Vaciar carro</i>
+                              </button>
+                            </form>
                         {% else %}
                           <p>No hay libros en tu carro.</p>
                         {% endif %}
