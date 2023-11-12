@@ -10,8 +10,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 import random
 
 # Create your views here.
+
+#Render main page y muestra libros en el index
 def index(request):
-    return render(request,'index.html')
+    cantidad_libros=6
+    libros=list(Libro.objects.all())
+    libros_aleatorios=random.sample(libros,min(cantidad_libros,len(libros)))
+    return render(request,'index.html',{'libros':libros_aleatorios})
 
 #Agregar un libro al sistema
 def add_libro(request):
@@ -76,13 +81,6 @@ def ver_libro(request, libro_id):
     libro=get_object_or_404(Libro, pk=libro_id)
     return render(request, 'libro.html', {'libro':libro})
 
-#Mostar libros en el index
-def mostrar_libro_index(request):
-    cantidad_libros=6
-    libros=list(Libro.objects.all())
-    libros_aleatorios=random.sample(libros,min(cantidad_libros,len(libros)))
-
-    return render(request,'mi_template.html',{'libros': libros_aleatorios})    
 
 
 #Registrarse como usuario                 

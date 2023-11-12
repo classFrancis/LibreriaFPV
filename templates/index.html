@@ -60,66 +60,20 @@
         </div>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4"><!--Productos destacados-->
+          {% for libro in libros %}  
             <div class="col">
-              <div class="card">
-                <img src="static/images/book.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">El Silmarillion</h5>
-                  <p class="card-text">El Silmarillion cuenta la historia de la Primera Edad, el antiguo drama del que hablan los personajes de El señor de los Anillos.</p>
-                  <p class="card-text">Precio $15.240</p>
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ libro.imagen.url }}" class="card-img-top" alt="{{ libro.titulo }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ libro.titulo }}</h5>
+                            <p class="card-text">{{ libro.tematica }}</p>
+                            <p class="card-text">Precio ${{ libro.precio }}</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="col">
-              <div class="card">
-                <img src="static/images/book (2).jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Casa De Cielo Y Aliento (Ciudad Medialuna #2)</h5>
-                  <p class="card-text">Bryce Quinlan y Hunt Athalar han salvado Ciudad Medialuna, y ha llegado por fin el momento de relajarse y tratar de volver a la normalidad.</p>
-                  <p class="card-text">Precio $15.790</p>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img src="static/images/book (3).jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Verity La Sombra Del Engaño</h5>
-                  <p class="card-text">Lowen Ashleigh, autora al borde de la bancarrota, recibe un encargo que le cambiará la vida: Jeremy, el flamante marido de Verity Crawford.</p>
-                  <p class="card-text">Precio $21.600</p>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img src="static/images/book 4.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">LOS HIJOS DE HURIN</h5>
-                  <p class="card-text">Los hijos de Húrin es uno de los grandes relatos que fundamentan la historia de la Tierra Media y se sitúa en la Primera Edad, cuando elfos, hombres y enanos llevaban unos pocos siglos sobre la tierra.</p>
-                  <p class="card-text">Precio $21.900</p>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                  <img src="static/images/book 5.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">EL CORAZON DE LA BRUJA</h5>
-                    <p class="card-text">La historia de Angrboda empieza donde acaba la de la mayoría de las brujas: con fuego. Este castigo de Odín por haberse negado a contarle el futuro, la deja herida y sin poderes, por lo que huye a los confines más lejanos de un bosque remoto.</p>
-                    <p class="card-text">Precio $24.990</p>  
-                </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <img src="static/images/book 6.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">TENGO MIEDO TORERO</h5>
-                    <p class="card-text">Tengo miedo Torero es el verso de una antigua canción española. Sus palabras sugieren, más allá de "su densa teatralidad" y sus ecos melancólicos, la interioridad recóndita de un país que, según lo define Lemebel, "sueña muy poco, sueña a crédito, no sueña lo imposible".</p>
-                    <p class="card-text">Precio $14.900</p>  
-                </div>
-                </div>
-              </div>
+          {% endfor %}
           </div>
           <div class="container text-center" style="margin-top: 50px;"><!-- Ubicaciones fisicas de tiendas -->
             <div class="row">
