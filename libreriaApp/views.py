@@ -1,5 +1,4 @@
 
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
@@ -7,7 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
+import random
 
 # Create your views here.
 def index(request):
@@ -37,7 +37,11 @@ def agregar_al_carro(request, libro_id):
     if not created:
         item.cantidad+=1
         item.save()
-    return JsonResponse({'status': 'success'})
+    referrer_url = request.META.get('HTTP_REFERER')
+    if 'verlibro' in referrer_url:
+        return redirect('verlibro', libro_id=libro_id)
+    else:
+        return redirect('catalogolibros')
 
 #Eliminar libro del carro de compras como usuario registrado
 @login_required
@@ -46,7 +50,11 @@ def eliminar_del_carro(request, libro_id):
     libro=get_object_or_404(Libro, id=libro_id)
     carro=get_object_or_404(CarroDeCompra,usuario=request.user)
     carro.librosAcomprar.remove(libro)
-    return JsonResponse({'status': 'success'})
+    referrer_url = request.META.get('HTTP_REFERER')
+    if 'verlibro' in referrer_url:
+        return redirect('verlibro', libro_id=libro_id)
+    else:
+        return redirect('catalogolibros')
 
 #Vaciar carro de compras como usuario registrado
 @login_required
@@ -56,7 +64,7 @@ def vaciar_carro(request):
     carro.librosAcomprar.clear() 
     carro.totalPrecio = 0.00  
     carro.save()
-    return JsonResponse({'status': 'success'})
+    return redirect('catalogolibros')
 
 #Listar libros del catalogo en el template del catalogo
 def catalogo(request):
@@ -67,6 +75,15 @@ def catalogo(request):
 def ver_libro(request, libro_id):
     libro=get_object_or_404(Libro, pk=libro_id)
     return render(request, 'libro.html', {'libro':libro})
+
+#Mostar libros en el index
+def mostrar_libro_index(request):
+    cantidad_libros=6
+    libros=list(Libro.objects.all())
+    libros_aleatorios=random.sample(libros,min(cantidad_libros,len(libros)))
+
+    return render(request,'mi_template.html',{'libros': libros_aleatorios})    
+
 
 #Registrarse como usuario                 
 def registrarse(request):
