@@ -74,7 +74,7 @@
                             <label class="alert alert-success" role="alert">
                               <h5>Precio total: ${{ total_precio }}</h5>
                             </label>
-                            <form class="ajax-form justify-content-between align-items-center" action="{% url 'vaciar_carro' %}" method="post" >
+                            <form class="justify-content-between align-items-center" action="{% url 'vaciar_carro' %}" method="post" >
                               {% csrf_token %}
                               <button type="submit" class="btn btn-danger btn-sm" style="margin-inline-start: auto;">
                                 <i class="bi bi-trash-fill">Vaciar carro</i>
