@@ -33,6 +33,7 @@ urlpatterns = [
     path('verlibro/<int:libro_id>/',views.ver_libro, name='verlibro'),
     path('carro/agregar/<int:libro_id>/', views.agregar_al_carro, name='agregar_al_carro'),
     path('carro/eliminar/<int:libro_id>', views.eliminar_del_carro, name='eliminar_del_carro'),
+    path('eliminarunlibro/<int:libro_id>', views.eliminar_un_libro_del_carro,name='eliminar_un_libro'),
     path('carro/vaciar', views.vaciar_carro, name='vaciar_carro'),
 
 

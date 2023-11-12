@@ -48,6 +48,21 @@ def agregar_al_carro(request, libro_id):
     else:
         return redirect('catalogolibros')
 
+#Eliminar solo un libro del carro de compras como usuario registrado
+@login_required
+@require_POST
+def eliminar_un_libro_del_carro(request,libro_id):
+    libro=get_object_or_404(Libro,id=libro_id)
+    carro=get_object_or_404(CarroDeCompra,usuario=request.user)
+    item=get_object_or_404(ItemCarro,carro=carro,libro=libro)
+    if item.cantidad > 1:
+        item.cantidad -= 1
+        item.save()
+    else:
+        item.delete()
+    referrer_url = request.META.get('HTTP_REFERER', 'catalogolibros')
+    return redirect(referrer_url)    
+
 #Eliminar libro del carro de compras como usuario registrado
 @login_required
 @require_POST

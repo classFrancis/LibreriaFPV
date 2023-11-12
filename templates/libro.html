@@ -21,9 +21,10 @@
                 <p>Precio: {{ libro.precio }}</p>
                 <form action="{% url 'agregar_al_carro' libro.id %}" method="post">
                   {% csrf_token %}
-                  <button type="submit" class="btn btn-success">Agregar al carro</button>
+                  <button type="submit" class="btn btn-success"> 
+                    <i class="bi bi-plus-circle"> Agregar al carro</i>
+                  </button>
                 </form>
-              
             </div>
         </label>
     </label>
