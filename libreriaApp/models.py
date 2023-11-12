@@ -15,7 +15,7 @@ class Autor(models.Model):
 
 class Libro(models.Model):
     titulo=models.CharField(max_length=200)
-    imagen=models.BinaryField(null=True,blank=True,editable=True)
+    imagen=models.ImageField(upload_to='imagenes_libros/',null=True,blank=True,editable=True)
     autorlibro=models.ForeignKey(Autor,on_delete=models.CASCADE)
     tematica=models.CharField(max_length=150)
     editorial=models.CharField(max_length=150)

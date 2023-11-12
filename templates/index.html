@@ -6,7 +6,6 @@
 <body>
     {% block content %}
     <!--Navbar heredado-->
-    
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel"><!--Banner-->
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -79,6 +78,7 @@
                             <h5 class="card-title">{{ libro.titulo }}</h5>
                             <p class="card-text">{{ libro.tematica }}</p>
                             <p class="card-text">Precio ${{ libro.precio }}</p>
+                            <a class="btn btn-outline-success" href="{% url 'verlibro' libro.id %}" target="_blank">Ver Libro</a>
                         </div>
                     </div>
                 </div>

@@ -19,7 +19,7 @@
                 <p>Fecha de Publicación: {{ libro.fechaDePublicacion }}</p>
                 <p>Cantidad: {{ libro.cantidad }}</p>
                 <p>Precio: {{ libro.precio }}</p>
-                <form class="ajax-form" action="{% url 'agregar_al_carro' libro.id %}" method="post">
+                <form action="{% url 'agregar_al_carro' libro.id %}" method="post">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-success">Agregar al carro</button>
                 </form>
