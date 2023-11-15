@@ -2,7 +2,8 @@
 validaciones de entrada de datos"""
 
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth import get_user_model
 from .models import *
 from django.db import transaction
 
@@ -37,6 +38,24 @@ class UsuarioRegistroForm(UserCreationForm):
                 Perfil.objects.create(usuario=usuario)
                 CarroDeCompra.objects.create(usuario=usuario)
         return usuario
+
+#Modificar datos de usuario
+User = get_user_model()
+class CustomUserChangeForm(UserChangeForm):
+    password=None
+    class Meta:
+        model=User
+        fields=('first_name','last_name','email','rut','username')
+    
+    first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre'}),label="")    
+    last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Apellido'}),label="")  
+    email=forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'}),label="")  
+    rut=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'rut'}),label="")
+    username=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de Usuario'}),label="")
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        self.fields.pop('password', None) 
 
 #Registra un Autor en el sistema
 class AutorRegistroForm(forms.ModelForm):
@@ -81,4 +100,15 @@ class LibroRegistroForm(forms.ModelForm):
             libro.save()
         return libro
 
-#
+#Registra los datos del perfil de usuario
+class PerfilRegistroForm(forms.ModelForm):
+    class Meta:
+        model=Perfil
+        fields='__all__'
+        exclude=('usuario',)
+        
+    biografiaPerfil=forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Biografia'}),label='')
+    areasDeInteres=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Areas de interes'}),label='')
+    librosLeidos=forms.ModelMultipleChoiceField(queryset=Libro.objects.all(),widget=forms.CheckboxSelectMultiple(),label='')
+    imagenPerfil=forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}),label="",required=False)
+

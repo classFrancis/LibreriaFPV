@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 import random
 
 # Create your views here.
@@ -96,8 +99,6 @@ def ver_libro(request, libro_id):
     libro=get_object_or_404(Libro, pk=libro_id)
     return render(request, 'libro.html', {'libro':libro})
 
-
-
 #Registrarse como usuario                 
 def registrarse(request):
     form=UsuarioRegistroForm()
@@ -110,10 +111,57 @@ def registrarse(request):
         form=UsuarioRegistroForm()           
     return render(request,'registrarse.html',{'form':form})
 
-#Render perfil usuario
+#Modificar password
+@login_required
+def cambiar_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Tu contraseña ha sido actualizada con éxito.')
+            return redirect('perfil')
+        else:
+            messages.error(request, 'Por favor, corrija el error.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'cambiarpassword.html', {'form': form})
+
+#Modificar datos de cuenta de usuario
+@login_required
+def modificar_datos_cuenta(request):
+    usuario=request.user
+    if request.method=='POST':
+        form=CustomUserChangeForm(request.POST,instance=usuario)
+        if form.is_valid():
+            form.save()
+            return redirect('perfil')
+    else:
+        form=CustomUserChangeForm(instance=usuario)
+    return render(request, 'modificardatosdecuenta.html',{'form':form})
+
+#Registro y modificacion de datos de perfil de usuario
+@login_required
+def registro_perfil(request):
+    try:
+        perfil,created=Perfil.objects.get_or_create(usuario=request.user)
+        if request.method=='POST':
+            form=PerfilRegistroForm(request.POST,request.FILES,instance=perfil)
+            if form.is_valid():
+                form.save()
+                return redirect('perfil')
+        else:
+            form=PerfilRegistroForm(instance=perfil)
+    except Perfil.DoesNotExist:
+        form=PerfilRegistroForm()
+    return render(request,'registroperfil.html',{'form':form})
+
+#Render perfil usuario con datos de los mismos
 @login_required(login_url='login')
 def perfil(request):
-    return render(request,'perfil.html')
+    perfil_usuario, created = Perfil.objects.get_or_create(usuario=request.user)
+    context = {'perfil': perfil_usuario,'usuario':request.user}
+    return render(request,'perfil.html',context)
 
 #Render perfil super usuario
 @login_required(login_url='login')
@@ -122,11 +170,15 @@ def perfil_admin(request):
 
 #Login al sistema
 def login_usuario(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('perfiladmin')
+        else:
+            return redirect('perfil')
+        
     user_message=request.GET.get('message',None)  
-    
     if request.method=="POST":
         form=UsuarioLoginForm(data=request.POST)
-        
         if form.is_valid():
             username=form.cleaned_data.get('username')
             password=form.cleaned_data.get('password')

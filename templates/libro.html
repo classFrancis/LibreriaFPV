@@ -7,27 +7,27 @@
 <body>
     {% block content %}
     <!--Navbar heredado-->
-    <label class="d-flex align-items-center justify-content-center full-height " style="margin-top: 50px;">
-        <label class="card" style="width: 50rem;">
-            <img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}">
-            <div class="card-body">
-                <h1>{{ libro.titulo }}</h1>
-                <p>Autor: {{ libro.autorlibro.nombreAutor }} {{ libro.autorlibro.apellidoAutor }}</p>
-                <p>Tematica: {{ libro.tematica }}</p>
-                <p>Editorial: {{ libro.editorial }}</p>
-                <p>Edición: {{ libro.edicion }}</p>
-                <p>Fecha de Publicación: {{ libro.fechaDePublicacion }}</p>
-                <p>Cantidad: {{ libro.cantidad }}</p>
-                <p>Precio: {{ libro.precio }}</p>
-                <form action="{% url 'agregar_al_carro' libro.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-success"> 
-                    <i class="bi bi-plus-circle"> Agregar al carro</i>
-                  </button>
-                </form>
-            </div>
-        </label>
-    </label>
+      <label class="d-flex align-items-center justify-content-center full-height " style="margin-top: 50px;">
+          <label class="card" style="width: 50rem;">
+              <img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}">
+              <div class="card-body">
+                  <h1>{{ libro.titulo }}</h1>
+                  <p>Autor: {{ libro.autorlibro.nombreAutor }} {{ libro.autorlibro.apellidoAutor }}</p>
+                  <p>Tematica: {{ libro.tematica }}</p>
+                  <p>Editorial: {{ libro.editorial }}</p>
+                  <p>Edición: {{ libro.edicion }}</p>
+                  <p>Fecha de Publicación: {{ libro.fechaDePublicacion }}</p>
+                  <p>Cantidad: {{ libro.cantidad }}</p>
+                  <p>Precio: {{ libro.precio }}</p>
+                  <form action="{% url 'agregar_al_carro' libro.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success"> 
+                      <i class="bi bi-plus-circle"> Agregar al carro</i>
+                    </button>
+                  </form>
+              </div>
+          </label>
+      </label>
     <div class="container-fluid text-center"><!-- Grid para un boton de volver atras -->
         <div class="row">
           <div class="col">

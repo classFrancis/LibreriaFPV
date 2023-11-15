@@ -1,0 +1,38 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+
+<head>
+  <title>{% block title %}Modificar datos de cuenta{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <!--Navbar heredado-->
+    <div class="container-fluid" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-md-3">
+                <img src="{{ perfil.imagenPerfil.url }}" alt="{{ perfil.nombre}}">
+                <div class="list-group">
+                    <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action active">Volver al perfil</a>
+                </div>
+            </div>
+            <form method="post" action="{% url 'modificar_datos_de_cuenta' %}" enctype="multipart/form-data" class="col-md-9">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Datos de usuario</h3>
+                        {{ form }}
+                    </div>
+                    <div class="col-md-6">
+                        <h3></h3> 
+                        <h3></h3>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary">Confirmar cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    {% endblock content %}
+</body>
+</html>
