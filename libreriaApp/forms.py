@@ -84,22 +84,6 @@ class LibroRegistroForm(forms.ModelForm):
     disponible=forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),label="",required=False)
     imagen=forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}),label="",required=False)
 
-    def clean_imagen(self):
-        imagen=self.cleaned_data.get('imagen', False)
-        if imagen:
-            if imagen.size > 1 * 1024 * 1024:
-                raise forms.ValidationError("El archivo de imagen es demasiado grande ( > 1mb ).")
-            return imagen
-
-    def save(self,commit=True):
-        libro=super(LibroRegistroForm, self).save(commit=False)
-        if self.cleaned_data.get('imagen'):
-            imagen=self.cleaned_data['imagen']
-            libro.imagen = imagen.read()
-        if commit:
-            libro.save()
-        return libro
-
 #Registra los datos del perfil de usuario
 class PerfilRegistroForm(forms.ModelForm):
     class Meta:
@@ -109,6 +93,6 @@ class PerfilRegistroForm(forms.ModelForm):
         
     biografiaPerfil=forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Biografia'}),label='')
     areasDeInteres=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Areas de interes'}),label='')
-    librosLeidos=forms.ModelMultipleChoiceField(queryset=Libro.objects.all(),widget=forms.CheckboxSelectMultiple(),label='')
+    librosLeidos=forms.ModelMultipleChoiceField(queryset=Libro.objects.all(),widget=forms.CheckboxSelectMultiple(),label='',required=False)
     imagenPerfil=forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}),label="",required=False)
 

@@ -1,6 +1,5 @@
 {% extends "navbarperfiles.html" %}
 {% load static %}
-
 <head>
   <title>{% block title %}Perfil de usuario{% endblock %}</title>
 </head>
@@ -14,10 +13,7 @@
                     {{ usuario.first_name }} {{ usuario.last_name }}
                 <img class="img-fluid" src="{{ perfil.imagenPerfil.url }}" style="margin-bottom: 20px;">
                 <div class="list-group">
-                    <a href="{% url 'registro_perfil' %}" class="list-group-item list-group-item-action active">Modificar los datos de mi Perfil</a>
-                    <a href="{% url 'modificar_datos_de_cuenta' %}" class="list-group-item list-group-item-action active">Modificar los datos la cuenta</a>
-                    <a href="{% url 'modificar_password' %}" class="list-group-item list-group-item-action active">Modificar Password</a>
-                    <a href="#" class="list-group-item list-group-item-action active">Crear publicación</a>
+                    <a href="#" class="list-group-item list-group-item-action active">Banear usuario</a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -38,6 +34,19 @@
                     <li>Ninguno</li>
                     {% endfor %}
             </div>
+        </div>
+      </div>
+      <div class="container-fluid text-center"><!-- Grid para el  boton de volver al inicio-->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
         </div>
       </div>
     {% endblock content %}

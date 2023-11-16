@@ -1,0 +1,37 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+<head>
+  <title>{% block title %}Autores registrados{% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+    <!--Navbar heredado-->
+    <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Autores para editar</h5>
+    <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
+    <div class="list-group">
+        {% for autor in autores %}
+            <a href="{% url 'editar_autor' autor.id %}" class="list-group-item list-group-item-action">
+                <p class="mb-1">{{ autor.nombreAutor }} {{ autor.apellidoAutor }}</p>
+            </a>
+        {% empty %}
+            <p>No hay autores registrados.</p>
+        {% endfor %}
+        
+    </div>
+    </label><!--End lista productos-->
+    <div class="container-fluid text-center"><!-- Grid para el  boton de volver al inicio-->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+      </div>
+      {% endblock content %}
+</body>
+</html>

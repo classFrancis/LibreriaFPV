@@ -1,0 +1,47 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+<head>
+  <title>{% block title %}Usuarios registrados{% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+    <!--Navbar heredado-->
+    <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista usuarios registrados</h5>
+    <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
+    <div class="list-group">
+        {% for usuario in usuarios %}
+            {% if usuario.perfil %}
+                <a href="{% url 'ver_perfil_como_admin' usuario.perfil.id %}" class="list-group-item list-group-item-action">
+                    <p class="mb-1">Nombre: {{ usuario.first_name }} {{ usuario.last_name }}</p>
+                    <p class="mb-1">UserName: {{ usuario.username }}</p>
+                    <p class="mb-1">Email: {{ usuario.email }}</p>
+                    <p class="mb-1">Rut: {{ usuario.rut }}</p>
+                    <p class="mb-1">Fecha del ultimo ingreso: {{ usuario.last_login }}</p>
+                </a>
+            {% else %}
+            <a class="list-group-item list-group-item">
+                <p>Perfil no disponible para {{ usuario.username }} debido a la condicion de administrador</p>
+            </a> 
+            {% endif %}
+        {% empty %}
+            <p>No hay usuarios registrados.</p>
+        {% endfor %}
+        
+    </div>
+    </label>
+    <div class="container-fluid text-center"><!-- Grid para el  boton de volver al inicio-->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+      </div>
+      {% endblock content %}
+</body>
+</html>

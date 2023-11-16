@@ -1,0 +1,62 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+
+<head>
+    <title>{% block title %}Eliminar Autor{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <!--Navbar heredado-->
+      <label class="d-flex align-items-center justify-content-center full-height " style="margin-top: 50px;">
+          <label class="card" style="width: 50rem;">
+              <div class="card-body">
+                  <p>Autor: {{ autor.nombreAutor }} {{ autor.apellidoAutor }}</p>
+                  <p>Biografia: {{ autor.biografiaAutor }}</p>
+                  <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#alertamodal">
+                      Eliminar Autor del sistema
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="alertamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">AVISO MUY IMPORTANTE</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <p>La eliminacion del autor conlleva la eliminacion de todos los libros del autor existentes en el sistema. 
+                              Esta accion no se puede revertir!</p>
+                            <form action="{% url 'eliminar_autor' autor.id %}" method="post">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-outline-danger"> 
+                                  Eliminar autor del sistema
+                              </button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+          </label>
+      </label>
+    <div class="container-fluid text-center"><!-- Grid para un boton de volver atras -->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+    </div>
+    {% endblock content %}
+</body>
+</html>

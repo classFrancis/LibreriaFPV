@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -12,7 +12,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 import random
 
-# Create your views here.
+#Decorador personalizado para verificar si el user es administrador
+def es_admin(user):
+    return user.is_active and user.is_superuser
+admin_only = user_passes_test(es_admin, login_url='login')
 
 #Render main page y muestra libros en el index
 def index(request):
@@ -22,21 +25,39 @@ def index(request):
     return render(request,'index.html',{'libros':libros_aleatorios})
 
 #Agregar un libro al sistema
-@login_required
+@admin_only
+@login_required(login_url='login')
 def add_libro(request):
     form=LibroRegistroForm()
     if request.method=='POST':
         form=LibroRegistroForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return redirect(reverse('agregar_libro_al_sistema')+'?messge=Registro exitoso.')
+            return redirect(reverse('perfiladmin')+'?messge=Registro exitoso.')
         else:
             return render(request,'agregarlibro.html',{'form':form})
     else:
         form=LibroRegistroForm()
     return render(request,'agregarlibro.html',{'form':form})
 
+#Agregar autor
+@admin_only
+@login_required(login_url='login')
+def add_autor(request):
+    form=AutorRegistroForm()
+    if request.method=='POST':
+        form=AutorRegistroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('perfiladmin'))
+        else:
+            return render(request,'registrarautor.html',{'form':form})
+    else:
+        form=AutorRegistroForm()
+    return render(request,'registrarautor.html',{'form':form})
+
 #Modificar libro del sistema
+@admin_only
 def editar_libro(request,libro_id):
     libro=get_object_or_404(Libro,pk=libro_id)
     if request.method=='POST':
@@ -48,8 +69,57 @@ def editar_libro(request,libro_id):
         form=LibroRegistroForm(instance=libro)
     return render(request, 'editarlibro.html',{'form': form,'libro': libro})
 
+#Editar autor
+@admin_only
+def editar_autor(request,autor_id):
+    autor=get_object_or_404(Autor,pk=autor_id)
+    if request.method=='POST':
+        form=AutorRegistroForm(request.POST,instance=autor)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('lista_editar_autor'))
+    else:
+        form=AutorRegistroForm(instance=autor)
+    return render(request, 'modificarautor.html',{'form': form,'autor': autor})
+
+#Listar usuarios
+@admin_only
+def lista_usuarios(request):
+    usuarios=Usuario.objects.all()
+    return render(request,'listausuarios.html',{'usuarios':usuarios})
+
+#Listar autores
+@admin_only
+def lista_autores(request):
+    autores = Autor.objects.all()
+    return render(request, 'listaautores.html', {'autores': autores})
+
+#Listar autores eliminar
+@admin_only
+def lista_autores_eliminar(request):
+    autores = Autor.objects.all()
+    return render(request, 'listaautoreseliminar.html', {'autores': autores})
+
+#Eliminar libro del sistema
+@admin_only
+def eliminar_libro(request,libro_id):
+    libro=get_object_or_404(Libro,pk=libro_id)
+    if request.method=='POST':
+        libro.delete()
+        return redirect(reverse('catalogo_libros_eliminar'))
+    return render(request, 'eliminarlibro.html',{'libro':libro})
+
+#Eliminar autor del sistema
+@admin_only
+def eliminar_autor(request,autor_id):
+    autor=get_object_or_404(Autor,pk=autor_id)
+    if request.method=='POST':
+        autor.delete()
+        return redirect(reverse('lista_eliminar_autor'))
+    return render(request,'eliminarautor.html',{'autor':autor})
+
 #Agregar libro al carro de compras como usuario registrado
-@login_required
+@login_required(login_url='login')
 @require_POST
 def agregar_al_carro(request, libro_id):
     libro=get_object_or_404(Libro,id=libro_id)
@@ -65,7 +135,7 @@ def agregar_al_carro(request, libro_id):
         return redirect('catalogolibros')
 
 #Eliminar solo un libro del carro de compras como usuario registrado
-@login_required
+@login_required(login_url='login')
 @require_POST
 def eliminar_un_libro_del_carro(request,libro_id):
     libro=get_object_or_404(Libro,id=libro_id)
@@ -80,7 +150,7 @@ def eliminar_un_libro_del_carro(request,libro_id):
     return redirect(referrer_url)    
 
 #Eliminar libro del carro de compras como usuario registrado
-@login_required
+@login_required(login_url='login')
 @require_POST
 def eliminar_del_carro(request, libro_id):
     libro=get_object_or_404(Libro, id=libro_id)
@@ -93,7 +163,7 @@ def eliminar_del_carro(request, libro_id):
         return redirect('catalogolibros')
 
 #Vaciar carro de compras como usuario registrado
-@login_required
+@login_required(login_url='login')
 @require_POST
 def vaciar_carro(request):
     carro = get_object_or_404(CarroDeCompra, usuario=request.user)
@@ -108,9 +178,16 @@ def catalogo(request):
     return render(request, 'catalogo.html', {'libros': libros})
 
 #Listar libros del catalogo para editar
+@admin_only
 def catalogo_edicion(request):
     libros = Libro.objects.all()
     return render(request, 'catalogoedicionlibro.html', {'libros': libros})
+
+#Listar libros del catalogo para eliminar
+@admin_only
+def catalogo_eliminacion_libro(request):
+    libros = Libro.objects.all()
+    return render(request, 'catalogoeliminarlibro.html', {'libros': libros})
 
 #Ver Libro del catalogo
 def ver_libro(request, libro_id):
@@ -130,7 +207,7 @@ def registrarse(request):
     return render(request,'registrarse.html',{'form':form})
 
 #Modificar password
-@login_required
+@login_required(login_url='login')
 def cambiar_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -146,7 +223,7 @@ def cambiar_password(request):
     return render(request, 'cambiarpassword.html', {'form': form})
 
 #Modificar datos de cuenta de usuario
-@login_required
+@login_required(login_url='login')
 def modificar_datos_cuenta(request):
     usuario=request.user
     if request.method=='POST':
@@ -159,7 +236,7 @@ def modificar_datos_cuenta(request):
     return render(request, 'modificardatosdecuenta.html',{'form':form})
 
 #Registro y modificacion de datos de perfil de usuario
-@login_required
+@login_required(login_url='login')
 def registro_perfil(request):
     try:
         perfil,created=Perfil.objects.get_or_create(usuario=request.user)
@@ -181,7 +258,14 @@ def perfil(request):
     context = {'perfil': perfil_usuario,'usuario':request.user}
     return render(request,'perfil.html',context)
 
+#Ver perfil como admin
+@admin_only
+def ver_perfil_como_admin(request, perfil_id):
+    perfil=get_object_or_404(Perfil, pk=perfil_id)
+    return render(request, 'verperfilcomoadmin.html', {'perfil':perfil})
+
 #Render perfil super usuario
+@admin_only
 @login_required(login_url='login')
 def perfil_admin(request):
     return render(request,'perfilAdmin.html')

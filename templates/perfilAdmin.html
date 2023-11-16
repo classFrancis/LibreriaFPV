@@ -10,18 +10,24 @@
         <div class="row">
           <div class="col" style="margin-top: 150px;">
             <div class="list-group">
+              <a href="{% url 'registrar_autor' %}" class="list-group-item list-group-item-action active">Agregar un Autor</a>
+              <a href="{% url 'lista_editar_autor' %}" class="list-group-item list-group-item-action active">Modificar Datos de Autor</a>
+              <a href="{% url 'lista_eliminar_autor' %}" class="list-group-item list-group-item-action active">Eliminar Autor</a>
+          </div>
+          </div>
+          <div class="col" style="margin-top: 150px;">
+            <div class="list-group">
               <a href="{% url 'agregar_libro_al_sistema' %}" class="list-group-item list-group-item-action active">Agregar libro</a>
               <a href="{% url 'catalogolibroseditar' %}" class="list-group-item list-group-item-action active">Modificar libro</a>
-              <a href="{% url 'catalogolibroseditar' %}" class="list-group-item list-group-item-action active">Eliminar libro</a>
-              <a href="#" class="list-group-item list-group-item-action active">Ver reportes</a>
-              <a href="#" class="list-group-item list-group-item-action active">Gestionar cuentas de usuarios</a>
-          </div>
-          </div>
-          <div class="col">
-            Column
-          </div>
-          <div class="col">
-            Column
+              <a href="{% url 'catalogo_libros_eliminar' %}" class="list-group-item list-group-item-action active">Eliminar libro</a>
+            </div>
+            </div>
+          <div class="col" style="margin-top: 150px;">
+            <div class="list-group">
+              <a href="{% url 'lista_usuarios' %}" class="list-group-item list-group-item-action active">Gestionar usuarios</a>
+              <a href="#" class="list-group-item list-group-item-action active">Eliminar publicacion</a>
+              <a href="#" class="list-group-item list-group-item-action active">Eliminar comentarios</a>
+            </div>
           </div>
         </div>
       </div>
