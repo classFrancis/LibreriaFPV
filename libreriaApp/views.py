@@ -22,18 +22,31 @@ def index(request):
     return render(request,'index.html',{'libros':libros_aleatorios})
 
 #Agregar un libro al sistema
+@login_required
 def add_libro(request):
     form=LibroRegistroForm()
     if request.method=='POST':
         form=LibroRegistroForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return redirect(reverse('TEMPLATE DE REGISTRO')+'?messge=Registro exitoso.')
+            return redirect(reverse('agregar_libro_al_sistema')+'?messge=Registro exitoso.')
         else:
-            return render(request,'TEMPLATE DE REGISTRO',{'form':form})
+            return render(request,'agregarlibro.html',{'form':form})
     else:
         form=LibroRegistroForm()
-    return render(request,'TEMPLATE DE REGISTRO',{'form':form})
+    return render(request,'agregarlibro.html',{'form':form})
+
+#Modificar libro del sistema
+def editar_libro(request,libro_id):
+    libro=get_object_or_404(Libro,pk=libro_id)
+    if request.method=='POST':
+        form=LibroRegistroForm(request.POST,request.FILES,instance=libro)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('catalogolibroseditar'))
+    else:
+        form=LibroRegistroForm(instance=libro)
+    return render(request, 'editarlibro.html',{'form': form,'libro': libro})
 
 #Agregar libro al carro de compras como usuario registrado
 @login_required
@@ -93,6 +106,11 @@ def vaciar_carro(request):
 def catalogo(request):
     libros = Libro.objects.all()
     return render(request, 'catalogo.html', {'libros': libros})
+
+#Listar libros del catalogo para editar
+def catalogo_edicion(request):
+    libros = Libro.objects.all()
+    return render(request, 'catalogoedicionlibro.html', {'libros': libros})
 
 #Ver Libro del catalogo
 def ver_libro(request, libro_id):

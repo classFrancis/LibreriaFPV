@@ -13,6 +13,9 @@ class Autor(models.Model):
     apellidoAutor=models.CharField(max_length=150)
     biografiaAutor=models.TextField(max_length=2500,blank=True)
 
+    def __str__(self):
+        return f'{self.nombreAutor} {self.apellidoAutor}' 
+
 class Libro(models.Model):
     titulo=models.CharField(max_length=200)
     imagen=models.ImageField(upload_to='imagenes_libros/',null=True,blank=True,editable=True)

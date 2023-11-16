@@ -1,0 +1,44 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+<head>
+  <title>{% block title %}Catalogo para editar{% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+    <!--Navbar heredado-->
+    <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Libros para editar</h5>
+    <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
+    <div class="list-group">
+        {% for libro in libros %}
+            <a href="{% url 'editar_libro_del_sistema' libro.id %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Nombre: {{ libro.titulo }}</h5>
+                    <small>Fecha de publicacion: {{ libro.fechaDePublicacion }}</small>
+                </div>
+                <p class="mb-1">Autor: {{ libro.autorlibro.nombreAutor }} {{ libro.autorlibro.apellidoAutor }}</p>
+                <p class="mb-1">Tematica: {{ libro.tematica }}</p>
+                <small>Editorial: {{ libro.editorial }}</small>
+                <small>Valor: ${{ libro.precio }}</small>
+            </a>
+        {% empty %}
+            <p>No hay libros disponibles.</p>
+        {% endfor %}
+        
+    </div>
+    </label><!--End lista productos-->
+    <div class="container-fluid text-center"><!-- Grid para el  boton de volver al inicio-->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+      </div>
+      {% endblock content %}
+</body>
+</html>

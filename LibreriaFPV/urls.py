@@ -38,6 +38,9 @@ urlpatterns = [
     path('carro/eliminar/<int:libro_id>', views.eliminar_del_carro, name='eliminar_del_carro'),
     path('eliminarunlibro/<int:libro_id>', views.eliminar_un_libro_del_carro,name='eliminar_un_libro'),
     path('carro/vaciar', views.vaciar_carro, name='vaciar_carro'),
+    path('agregarlibro/',views.add_libro,name='agregar_libro_al_sistema'),
+    path('catalogolibrosedicion/',views.catalogo_edicion, name='catalogolibroseditar'),
+    path('editarlibro/<int:libro_id>',views.editar_libro,name='editar_libro_del_sistema'),
 
 
 
