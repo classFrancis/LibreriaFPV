@@ -8,7 +8,7 @@
     <!--Navbar heredado-->
     <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Libros para editar</h5>
     {% csrf_token %}
-            <form class="d-flex" role="search" method="get" action="{% url 'buscar_libro_editar' %}"><!-- Buscador libros -->
+            <form class="d-flex" role="search" method="get" action="{% url 'buscar_libro' %}"><!-- Buscador libros -->
               <input class="form-control me-2" type="search" name="q" placeholder="Buscar libro por titulo, autor o tematica" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form><!-- End buscador libros -->
