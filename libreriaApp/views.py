@@ -343,3 +343,128 @@ def buscar_autor(request):
     else:
         autores=Autor.objects.all()
     return render(request,'resultadobusquedaautores.html',{'autores':autores})
+
+#------------------------------------------------------------------------------------------------------------------------
+#Crear publicacion con titulo y libro asociado
+@login_required
+def crear_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            nuevo_post = form.save(commit=False)
+            nuevo_post.usuario = request.user  
+            nuevo_post.save()
+            messages.success(request, 'El post ha sido creado exitosamente.')
+            return redirect('publicacion') 
+        else:
+            messages.error(request, 'Ha ocurrido un error al crear el post.')
+    else:
+        form = PostForm()
+
+    return render(request, 'publicacion.html', {'form': form})
+
+#Ver y gestionar posts and comentarios
+@login_required
+def publicacion(request):
+    current_usuario = get_object_or_404(Usuario, pk=request.user.pk)
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            posteo = form.save(commit=False)
+            posteo.usuario = current_usuario
+            posteo.save()
+            return redirect('publicacion')
+        else:
+            # Aquí pasamos el formulario con errores de nuevo al template
+            publicaciones = Post.objects.all()
+            comentarios = Comentario.objects.all()
+            form_comentario = ComentarioForm()
+            return render(request, 'foro.html', {
+                'form': form, 
+                'publicaciones': publicaciones, 
+                'comentarios': comentarios, 
+                'form_comentario': form_comentario
+            })
+    else:
+        form = PostForm()
+        publicaciones = Post.objects.all()
+        comentarios = Comentario.objects.all()
+        form_comentario = ComentarioForm()
+        return render(request, 'foro.html', {
+            'form': form, 
+            'publicaciones': publicaciones, 
+            'comentarios': comentarios, 
+            'form_comentario': form_comentario
+        })
+
+#crear comentario
+@login_required
+def comentar_publicacion(request, publicacion_id):
+    publicacion = get_object_or_404(Post, id=publicacion_id)
+    form_comentario = ComentarioForm(request.POST)
+    if form_comentario.is_valid():
+        comentario = form_comentario.save(commit=False)
+        comentario.usuario = request.user
+        comentario.post = publicacion
+        comentario.save()
+        return redirect('publicacion')
+    else:
+        form_comentario = ComentarioForm()
+        pass
+
+#Eiminar publicacion
+@login_required
+def eliminar_publicacion(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.usuario == request.user or request.user.is_superuser:
+        post.delete()
+    return redirect('publicacion')
+
+#Eliminar comentario
+@login_required
+def eliminar_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+    if comentario.usuario == request.user or request.user.is_superuser:
+        comentario.delete()
+    return redirect('publicacion')
+
+#Editar publicacion
+@login_required
+def editar_publicacion(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.usuario != request.user:
+        # Redireccionar o mostrar mensaje de error si el usuario no es el dueño de la publicación
+        return redirect('publicacion')
+    
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('publicacion')
+    else:
+        form = PostForm(instance=post)
+    
+    return render(request, 'editarPublicacion.html', {'form': form})
+
+#Editar comentario
+@login_required
+def editar_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+
+    if comentario.usuario != request.user:
+        return redirect('publicacion')
+
+    if request.method == "POST":
+        form = ComentarioForm(request.POST, instance=comentario)
+        if form.is_valid():
+            form.save()
+            return redirect('publicacion')
+        else:
+            # Imprimir los errores en la consola para depuración
+            print(form.errors)
+            # Pasar el formulario con errores a la plantilla
+            return render(request, 'editarComentario.html', {'form': form})
+    else:
+        form = ComentarioForm(instance=comentario)
+    
+    return render(request, 'editarComentario.html', {'form': form})

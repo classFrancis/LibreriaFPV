@@ -87,7 +87,7 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'libreria',
+        'NAME': 'libreria1',
         'USER':'root',
         'PASSWORD':'2412',
         'PORT': 3306

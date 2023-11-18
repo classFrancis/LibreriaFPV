@@ -49,8 +49,10 @@ class Perfil(models.Model):
     librosLeidos=models.ManyToManyField(Libro,blank=True,related_name='libros_leidos') 
 
 class Post(models.Model):
+    tituloPost=models.CharField(max_length=200)
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
     contenidoPost=models.TextField(max_length=15000)
+    libroAsociado=models.ForeignKey(Libro,on_delete=models.SET_NULL,null=True)
     timestampPost=models.DateTimeField(auto_now_add=True)
     modificacion_timestampPost=models.DateField(auto_now=True)
 

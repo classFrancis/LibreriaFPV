@@ -98,3 +98,27 @@ class PerfilRegistroForm(forms.ModelForm):
     librosLeidos=forms.ModelMultipleChoiceField(queryset=Libro.objects.all(),widget=forms.CheckboxSelectMultiple(),label='',required=False)
     imagenPerfil=forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}),label="",required=False)
 
+
+#Formulario de posts
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('tituloPost','contenidoPost','libroAsociado')
+    tituloPost=forms.CharField(max_length=200,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título','style': 'width:500px'}),label="")
+    contenidoPost=forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Escribe un nuevo post', 'style': 'height:300px;width:500px'}))
+    libroAsociado=forms.ModelChoiceField(queryset=Libro.objects.all(), widget=forms.Select(attrs={'class': 'form-control','style': 'width:500px'}), required=False, label="Libro Asociado")
+
+#Formulario de comentarios
+class ComentarioForm(forms.ModelForm):
+     class Meta:
+        model = Comentario
+        fields = ('contenidoComentario',)
+     contenidoComentario = forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Agregar comentario', 'style' : 'height:50px'}))
+
+#Formulario reportes
+class ReporteForm(forms.ModelForm):
+    class Meta:
+        model = Reporte
+        fields = ('motivoReporte',)
+
+    motivoReporte=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Explica tu reporte'})

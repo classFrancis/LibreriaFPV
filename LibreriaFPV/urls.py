@@ -49,6 +49,14 @@ urlpatterns = [
     path('banearusuario/<int:perfil_id>',views.banear_usuario,name='banear_usuario'),
     path('buscar_libro/', views.buscar_libro, name='buscar_libro'),
     path('autor_libro/', views.buscar_autor, name='buscar_autor'),
+    #------------------------------------------------------------------
+    path('crear_post/', views.crear_post, name='crear_post'),
+    path('foro/', views.publicacion, name='publicacion'),
+    path('foro/<int:publicacion_id>/', views.comentar_publicacion, name='comentarPublicacion'),
+    path('eliminar_publicacion/<int:post_id>/', views.eliminar_publicacion, name='eliminarPublicacion'),
+    path('eliminar_comentario/<int:comentario_id>/', views.eliminar_comentario, name='eliminarComentario'),
+    path('editar_publicacion/<int:post_id>/', views.editar_publicacion, name='editarPublicacion'),
+    path('editar_comentario/<int:comentario_id>/', views.editar_comentario, name='editarComentario'),
 
 
 
