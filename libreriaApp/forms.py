@@ -73,6 +73,8 @@ class LibroRegistroForm(forms.ModelForm):
         model=Libro
         fields='__all__'
 
+    
+
     titulo=forms.CharField(max_length=200,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título'}),label="")
     autorlibro=forms.ModelChoiceField(queryset=Autor.objects.all(),widget=forms.Select(attrs={'class': 'form-control'}),label="")
     tematica=forms.CharField(max_length=150,widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'tematica'}),label="")
@@ -81,7 +83,7 @@ class LibroRegistroForm(forms.ModelForm):
     fechaDePublicacion=forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),label="")
     cantidad=forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Cantidad'}),label="")
     precio=forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),label="")
-    disponible=forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),label="",required=False)
+    disponible=forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),label="Libro disponible ",required=False)
     imagen=forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}),label="",required=False)
 
 #Registra los datos del perfil de usuario

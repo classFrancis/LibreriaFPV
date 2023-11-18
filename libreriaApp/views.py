@@ -11,6 +11,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 import random
+from django.db.models import Q 
 
 #Decorador personalizado para verificar si el user es administrador
 def es_admin(user):
@@ -262,7 +263,8 @@ def perfil(request):
 @admin_only
 def ver_perfil_como_admin(request, perfil_id):
     perfil=get_object_or_404(Perfil, pk=perfil_id)
-    return render(request, 'verperfilcomoadmin.html', {'perfil':perfil})
+    usuario=perfil.usuario
+    return render(request, 'verperfilcomoadmin.html', {'perfil':perfil,'usuario':usuario})
 
 #Render perfil super usuario
 @admin_only
@@ -307,4 +309,37 @@ def cerrar_sesion(request):
     logout(request)
     return redirect(reverse('login')+"?message=Has cerrado sesión correctamente.")
 
+#Banear usuario
+@admin_only
+def banear_usuario(request,perfil_id):
+    perfil=get_object_or_404(Perfil, pk=perfil_id)
+    usuario=perfil.usuario
+    usuario.is_active=not usuario.is_active
+    usuario.save()
+    return redirect('lista_usuarios')
 
+#Buscar libro por nombre, autor o tematica
+def buscar_libro(request):
+    query=request.GET.get('q', '')  
+    if query:
+        libros=Libro.objects.filter(
+            Q(titulo__icontains=query) | 
+            Q(autorlibro__nombreAutor__icontains=query) | 
+            Q(autorlibro__apellidoAutor__icontains=query) |
+            Q(tematica__icontains=query) 
+        )
+    else:
+        libros=Libro.objects.all()
+    return render(request, 'resultadosdebusqueda.html', {'libros': libros})
+
+#Buscar autor
+def buscar_autor(request):
+    query=request.GET.get('q','')
+    if query:
+        autores=Autor.objects.filter(
+            Q(nombreAutor__icontains=query) |
+            Q(apellidoAutor__icontains=query) 
+        )
+    else:
+        autores=Autor.objects.all()
+    return render(request,'resultadobusquedaautores.html',{'autores':autores})

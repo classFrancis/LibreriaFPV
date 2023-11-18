@@ -1,0 +1,28 @@
+{% extends "Navbarbiblioteca.html" %}
+<head>
+    <title>{% block title %}Resultados de busqueda{% endblock %}</title>
+</head>
+<body>
+{% block content %}
+    <h2>Resultados de Búsqueda</h2>
+    <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
+        <div class="list-group">
+            {% for libro in libros %}
+                <a href="{% url 'verlibro' libro.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Nombre: {{ libro.titulo }}</h5>
+                        <small>Fecha de publicacion: {{ libro.fechaDePublicacion }}</small>
+                    </div>
+                    <p class="mb-1">Autor: {{ libro.autorlibro.nombreAutor }} {{ libro.autorlibro.apellidoAutor }}</p>
+                    <p class="mb-1">Tematica: {{ libro.tematica }}</p>
+                    <small>Editorial: {{ libro.editorial }}</small>
+                    <small>Valor: ${{ libro.precio }}</small>
+                </a>
+            {% empty %}
+                <p>No hay libros disponibles.</p>
+            {% endfor %} 
+        </div>
+        </label><!--End lista productos-->
+{% endblock %}  
+</body>
+</html>

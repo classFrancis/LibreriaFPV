@@ -46,8 +46,9 @@ urlpatterns = [
     path('eliminarautor/<int:autor_id>',views.eliminar_autor,name='eliminar_autor'),
     path('listarusuarios/',views.lista_usuarios,name='lista_usuarios'),
     path('verperfilcomoadmin/<int:perfil_id>',views.ver_perfil_como_admin,name='ver_perfil_como_admin'),
-
-
+    path('banearusuario/<int:perfil_id>',views.banear_usuario,name='banear_usuario'),
+    path('buscar_libro/', views.buscar_libro, name='buscar_libro'),
+    path('autor_libro/', views.buscar_autor, name='buscar_autor'),
 
 
 

@@ -1,7 +1,7 @@
 {% extends "navbarperfiles.html" %}
 {% load static %}
 <head>
-  <title>{% block title %}Perfil de usuario{% endblock %}</title>
+  <title>{% block title %}Perfil{% endblock %}</title>
 </head>
 <body>
     {% block content %}
@@ -11,10 +11,45 @@
             <div class="col-md-3">
                 <h4>Nombre</h4>
                     {{ usuario.first_name }} {{ usuario.last_name }}
-                <img class="img-fluid" src="{{ perfil.imagenPerfil.url }}" style="margin-bottom: 20px;">
+                {% if perfil.imagenPerfil %}
+                  <img class="img-fluid" src="{{ perfil.imagenPerfil.url }}" style="margin-bottom: 20px;">
+                {% else %}
+                  <img class="img-fluid" src="{% static 'images/perfilpic.png' %}" style="margin-bottom: 20px;">
+                {% endif %}
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action active">Banear usuario</a>
-                </div>
+                  <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#avisoModal">
+                      {% if usuario.is_active %}
+                        Banear usuario
+                      {% else %}
+                        Quitar baneo de usuario
+                      {% endif %}
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="avisoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Aviso</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            {% if usuario.is_active %}
+                              <p>Esta accion limitara el ingreso del usuario a la plataforma. Esta accion se puede revertir.</p>
+                              <a href="{% url 'banear_usuario' perfil.id %}" class="btn btn-outline-danger">Banear usuario</a>
+                            {% else %}
+                              <p>Con esta accion el usuario podra volver a ingresar a la plataforma y utilizar sus funciones.</p>
+                              <a href="{% url 'banear_usuario' perfil.id %}" class="btn btn-outline-danger">Quitar baneo de usuario</a>
+                            {% endif %}
+                            </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                  </div>
             </div>
             <div class="col-md-4">
                 <h4>Nombre de usuario</h4>   

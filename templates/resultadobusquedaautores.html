@@ -1,0 +1,23 @@
+{% extends "navbarperfiles.html" %}
+<head>
+    <title>{% block title %}Resultados de busqueda{% endblock %}</title>
+</head>
+<body>
+{% block content %}
+    <h2>Resultados de Búsqueda</h2>
+    <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de autores -->
+        <div class="list-group">
+            {% for autor in autores %}
+                <a href="{% url 'editar_autor' autor.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                         <p class="mb-1">Autor: {{ autor.nombreAutor }} {{ autor.apellidoAutor }}</p>
+                    </div>
+                </a>
+            {% empty %}
+                <p>No encontrado.</p>
+            {% endfor %} 
+        </div>
+        </label><!--End lista autores-->
+{% endblock %}  
+</body>
+</html>

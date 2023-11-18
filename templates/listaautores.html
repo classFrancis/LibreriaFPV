@@ -7,6 +7,11 @@
   {% block content %}
     <!--Navbar heredado-->
     <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Autores para editar</h5>
+    {% csrf_token %}
+            <form class="d-flex" role="search" method="get" action="{% url 'buscar_autor' %}"><!-- Buscador de autores -->
+              <input class="form-control me-2" type="search" name="q" placeholder="Buscar autor para editar" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Buscar</button>
+            </form><!-- End buscador de autores -->
     <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
     <div class="list-group">
         {% for autor in autores %}

@@ -12,7 +12,11 @@
             <div class="col-md-3">
                 <h4>Nombre</h4>
                     {{ usuario.first_name }} {{ usuario.last_name }}
-                <img class="img-fluid" src="{{ perfil.imagenPerfil.url }}" style="margin-bottom: 20px;">
+                {% if perfil.imagenPerfil %}
+                    <img class="img-fluid" src="{{ perfil.imagenPerfil.url }}" style="margin-bottom: 20px;">
+                  {% else %}
+                    <img class="img-fluid" src="{% static 'images/perfilpic.png' %}" style="margin-bottom: 20px;">
+                  {% endif %}
                 <div class="list-group">
                     <a href="{% url 'registro_perfil' %}" class="list-group-item list-group-item-action active">Modificar los datos de mi Perfil</a>
                     <a href="{% url 'modificar_datos_de_cuenta' %}" class="list-group-item list-group-item-action active">Modificar los datos la cuenta</a>
