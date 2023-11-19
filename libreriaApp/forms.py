@@ -110,15 +110,15 @@ class PostForm(forms.ModelForm):
 
 #Formulario de comentarios
 class ComentarioForm(forms.ModelForm):
-     class Meta:
-        model = Comentario
-        fields = ('contenidoComentario',)
-     contenidoComentario = forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Agregar comentario', 'style' : 'height:50px'}))
+        class Meta:
+            model = Comentario
+            fields = ('contenidoComentario',)
+        contenidoComentario = forms.CharField(label='', widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Agregar comentario', 'style' : 'height:100px'}))
 
 #Formulario reportes
 class ReporteForm(forms.ModelForm):
     class Meta:
-        model = Reporte
-        fields = ('motivoReporte',)
+        model=Reporte
+        fields=('motivoReporte',)
 
-    motivoReporte=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Explica tu reporte'})
+    motivoReporte=forms.CharField(max_length=250,widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Explica tu reporte'}),label='')

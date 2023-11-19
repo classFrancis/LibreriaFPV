@@ -468,3 +468,43 @@ def editar_comentario(request, comentario_id):
         form = ComentarioForm(instance=comentario)
     
     return render(request, 'editarComentario.html', {'form': form})
+
+#Crear reporte asociado a post y usuario
+def crear_reporte(request,post_id=None):
+    usuario_reportante=request.user
+    post=None
+
+    if post_id:
+        post=get_object_or_404(Post,pk=post_id)
+    if request.method=='POST':
+        form=ReporteForm(request.POST)
+        if form.is_valid():
+            reporte=form.save(commit=False)
+            reporte.usuario=usuario_reportante
+            reporte.post=post
+            reporte.save()
+            return redirect('publicacion')
+    else:
+        form=ReporteForm()
+
+    return render(request,'reporteform.html',{'form': form,'post': post})
+
+#Crear reporte asociado a comentarioy usuario
+def crear_reporte_comentario(request,comentario_id=None):
+    usuario_reportante=request.user
+    comentario=None
+
+    if comentario_id:
+        comentario=get_object_or_404(Comentario,pk=comentario_id)
+    if request.method=='POST':
+        form=ReporteForm(request.POST)
+        if form.is_valid():
+            reporte=form.save(commit=False)
+            reporte.usuario=usuario_reportante
+            reporte.comentario=comentario
+            reporte.save()
+            return redirect('publicacion')
+    else:
+        form=ReporteForm()
+
+    return render(request,'reporteformcomentario.html',{'form': form,'comentario':comentario})

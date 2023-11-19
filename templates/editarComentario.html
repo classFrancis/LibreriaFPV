@@ -1,12 +1,30 @@
-{% extends 'foro.html' %}
-{% load static %}
 
-{% block content %}
-  <h2>Editar comentario</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-    <a href="{% url 'publicacion' %}" class="btn btn-primary">Cancelar</a>
-  </form>
-{% endblock %}  
+{% extends 'navbarperfiles.html' %}
+{% load static %}
+<head>
+    <title>{% block title %}Editar publicación{% endblock %}</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {% block content %}
+                  <h2 style="text-align: center;">Editar comentario</h2>
+                    <form method="post" class="d-flex flex-column align-items-center">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <div>
+                        <button type="submit" class="btn btn-outline-success mt-3">
+                            Confirmar
+                        </button> 
+                        <a href="{% url 'publicacion' %}" class="btn btn-outline-danger mt-3">
+                            Cancelar
+                        </a>
+                    </div>
+                    </form>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

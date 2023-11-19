@@ -77,19 +77,19 @@
             <a class="nav-link" href="#tabs-libro01" data-toggle="tab">Libros leídos</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="#tabs-publi01" data-toggle="tab">Publicaciones</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#tabs-config01" data-toggle="tab">Configuración</a>
           </li>
         </ul>
-      
         <div class="tab-content">
           <div class="tab-pane fade show active" id="tabs-bio01">
             {{ perfil.biografiaPerfil }}
           </div>
-      
           <div class="tab-pane fade" id="tabs-area01">
             {{ perfil.areasDeInteres }}
           </div>
-      
           <div class="tab-pane fade" id="tabs-libro01">
             {% for libro in perfil.librosLeidos.all %}
               <li>
@@ -99,12 +99,17 @@
               <li>Ninguno</li>
             {% endfor %}
           </div>
+          <div class="tab-pane fade" id="tabs-publi01">
+            <div class="list-group">
+              <a href="{% url 'crear_post' %}" class="list-group-item list-group-item-action active">Crear publicación</a>
+                
+            </div>
+          </div>
           <div class="tab-pane fade" id="tabs-config01">
             <div class="list-group">
               <a href="{% url 'registro_perfil' %}" class="list-group-item list-group-item-action active">Modificar los datos de mi Perfil</a>
               <a href="{% url 'modificar_datos_de_cuenta' %}" class="list-group-item list-group-item-action active">Modificar los datos la cuenta</a>
               <a href="{% url 'modificar_password' %}" class="list-group-item list-group-item-action active">Modificar Password</a>
-              <a href="{% url 'crear_post' %}" class="list-group-item list-group-item-action active">Crear publicación</a>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 
-    <title>Foro</title>
+    <title>{% block title %}Foro{% endblock %}</title>
 </head>
 <body>
     {% block content %}
@@ -73,10 +73,9 @@
                                 <div class="d-flex justify-content-end">
                                     <!--AGREGAR ACÁ BOTON DE REPORTAR) -->
                                     {% if publicacion.usuario != user and not user.is_superuser %}
-                                        <button type="submit" class="btn btn-outline-danger">Reportar</button>
+                                        <a href="{% url 'reportar_post' publicacion.id %}" class="btn btn-outline-danger">Reportar</a>
                                     {%endif%} 
                                 </div>
-                                
                                 <p class="d-inline-flex gap-1">
                                     <a class="custom-button" id="botonAcordeonComentarios-{{ publicacion.id }}" data-bs-toggle="collapse" href="#multiCollapseExample-{{ publicacion.id }}" role="button" aria-expanded="true" aria-controls="multiCollapseExample-{{ publicacion.id }}">Comentarios({{ publicacion.comentario_set.count }})</a>
                                 </p>
@@ -89,16 +88,21 @@
                                                         <div class="comentarioIndividual">
                                                             <strong>{{ comentario.usuario.username }}</strong>: {{ comentario.contenidoComentario }}
                                                             
-                                                <!-- PARA ELIMINAR COMENTARIO-->
+                                                            <!-- PARA ELIMINAR COMENTARIO-->
                                                             {% if comentario.usuario == user or user.is_superuser %}
-                                                            <a href="{% url 'eliminarComentario' comentario.id %}"><i class="bi bi-x-lg" style="color: red"></i></a>
-                                                            
+                                                                <a href="{% url 'eliminarComentario' comentario.id %}"><i class="bi bi-x-lg" style="color: red"></i></a>                
                                                             {% endif %}
                                                             {% if comentario.usuario == user  %}
                                                                 <a href="{% url 'editarComentario' comentario.id %}"><i class="bi bi-pencil-fill" style="color: blue"></i></a>
                                                             {% endif %}
+                                                            <!--AGREGAR ACÁ BOTON DE REPORTAR) -->
+                                                            {% if comentario.usuario != user and not user.is_superuser %}
+                                                                <a href="{% url 'reportar_comentario' comentario.id %}"><i class="bi bi-exclamation-diamond" style="color: red"></i></a>
+                                                            {%endif%} 
                                                         </div>
+                                                            
                                                     {% endfor %}
+                                                    
                                                 </div>
                                                 <!-- Formulario escribir comentario -->
                                                 <div class="formularioComentarios">

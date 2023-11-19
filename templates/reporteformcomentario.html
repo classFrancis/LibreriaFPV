@@ -1,0 +1,31 @@
+{% extends 'navbarperfiles.html' %}
+
+{% block content %}
+<head>
+    <title>{% block title %}Reportar{% endblock %}</title>
+</head>
+<body>
+    <div class="container-fluid text-center">
+        <div class="row">
+          <div class="col">
+            
+          </div>
+          <div class="col" style="margin-top: 20px;">
+            <h2>Reportar Comentario</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                        <button type="submit" class="btn btn-outline-success">Enviar Reporte</button>
+                        <a href="{% url 'publicacion' %}" class="btn btn-outline-danger">Cancelar</a>
+                    </div>    
+                </form>
+          </div>
+          <div class="col">
+            
+          </div>
+        </div>
+      </div>
+{% endblock %}
+</body>
+</html>
