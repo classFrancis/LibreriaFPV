@@ -4,7 +4,38 @@
 </head>
 <body>
 {% block content %}
-    <h2>Resultados de Búsqueda</h2>
+    <!--Navbar heredado-->
+    <style>
+    .rounded-image {
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+    width: 200px; /* Ajusta el tamaño según tus preferencias */
+    }
+
+    body {
+    background-color: rgb(151, 199, 238); 
+    }
+
+    .nav-tabs {
+    background-color: #0073ff; 
+    border: 1px solid rgb(0, 140, 255);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    }
+
+    .custom-btn {
+    width: 50%; /* Aumenta el ancho en un 10% */
+    background-color: #0073ff;
+    justify-content: center;
+    }
+    </style>
+    <div class="card mb-3" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <div class="card-body text-center">
+            <h2 class="card-title">Resultados de Búsqueda</h2>
+        </div>
+    </div>
     <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de autores -->
         <div class="list-group">
             {% for autor in autores %}
