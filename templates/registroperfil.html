@@ -2,41 +2,73 @@
 {% load static %}
 
 <head>
-  <title>{% block title %}Modificar datos del perfil{% endblock %}</title>
+    <title>{% block title %}Modificar datos del perfil{% endblock %}</title>
 </head>
 <body>
     {% block content %}
     <!--Navbar heredado-->
-    <div class="container-fluid" style="margin-top: 50px;">
-        <div class="row">
-            <div class="col-md-3">
-                <img src="{{ perfil.imagenPerfil.url }}" alt="{{ perfil.nombre}}">
-                <div class="list-group">
-                    <a href="{% url 'perfil' %}" class="list-group-item list-group-item-action active">Volver al perfil</a>
+    <style>
+        .rounded-image {
+        border-radius: 50%;
+        display: block;
+        margin: auto;
+        width: 200px; /* Ajusta el tamaño según tus preferencias */
+        }
+
+        body {
+        background-color: rgb(151, 199, 238); 
+        }
+
+        .nav-tabs {
+        background-color: #0073ff; 
+        border: 1px solid rgb(0, 140, 255);
+        border-radius: 25px;
+        display: flex;
+        justify-content: center;
+        }
+
+        .custom-btn {
+        width: 50%; /* Aumenta el ancho en un 10% */
+        }
+
+      </style>
+        <div class="container-fluid mx-auto" style="max-width: 100%;">
+            <div class="row justify-content-center">
+                <div class="col-md-3 text-center">
+                    <img src="{{ perfil.imagenPerfil.url }}" alt="{{ perfil.nombre }}">
                 </div>
-            </div>
-            <form method="post" action="{% url 'registro_perfil' %}" enctype="multipart/form-data" class="col-md-9">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3>Biografia perfil</h3>
-                        {{ form.biografiaPerfil }}
-                    </div>
-                    <div class="col-md-6">
-                        <h3>Áreas de interés</h3>
-                        {{ form.areasDeInteres }}  
-                        <h3>Libros leídos</h3>
-                        {{ form.librosLeidos }}
-                    </div>
-                        <h5>Imagen de perfil</h5>
+                <form method="post" action="{% url 'registro_perfil' %}" enctype="multipart/form-data" class="col-md-9">
+                    {% csrf_token %}
+                    <div class="row">
+                        <h3>Imagen de perfil</h3>
                         {{ form.imagenPerfil }}
-                    <div class="col-12 mt-3">
-                        <button type="submit" class="btn btn-primary">Confirmar cambios</button>
+                        <div class="col-md-6 text-center">
+                            <h3>Biografía perfil</h3>
+                            {{ form.biografiaPerfil }}
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h3>Áreas de interés</h3>
+                            {{ form.areasDeInteres }}
+                            <ul class="list-group">
+                                <h3>Libros leídos</h3>
+                                <li class="list-group-item">
+                                    {{ form.librosLeidos }}
+                                </li> 
+                            </ul>
+                        </div>
+                        
                     </div>
-                </div>
-            </form>
+                    <div class="mt-3 d-flex justify-content-between">
+                        <div class="col-6">
+                            <a href="{% url 'perfil' %}" class="btn btn-primary btn-block">Volver al perfil</a>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-primary btn-block">Confirmar cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-      </div>
     {% endblock content %}
 </body>
 </html>
