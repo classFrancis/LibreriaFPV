@@ -7,47 +7,53 @@
 <body>
     {% block content %}
     <!--Navbar heredado-->
-    <div class="container-fluid text-center ">
-        <div class="row">
-          <div class="col-md-3">
-            <!-- ?-->
-          </div>
-          <div class="col">
-            <form method="post" action="{% url 'editar_autor' autor.id %}" enctype="multipart/form-data" class="col-md-9">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>Datos del Autor</h3>
-                        {{ form }}
-                    </div>
-                    <div class="col-md-6">
-                        <h3></h3> 
-                        <h3></h3>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <button type="submit" class="btn btn-primary">Confirmar cambios</button>
-                    </div>
-                </div>
-            </form>
-          </div>
-          <div class="col-md-3">
-            <!-- ?-->
-          </div>
-        </div>
-    </div>                
-    <div class="container-fluid text-center"><!-- Grid para un boton de volver atras -->
-        <div class="row">
-          <div class="col">
-            <!-- ?-->
-          </div>
-          <div class="col">
-            <!-- ? -->
-          </div>
-          <div class="col">
-            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
-          </div>
-        </div>
+    <style>
+      .rounded-image {
+      border-radius: 50%;
+      display: block;
+      margin: auto;
+      width: 200px; /* Ajusta el tamaño según tus preferencias */
+      }
+
+      body {
+      background-color: rgb(151, 199, 238); 
+      }
+
+      .nav-tabs {
+      background-color: #0073ff; 
+      border: 1px solid rgb(0, 140, 255);
+      border-radius: 25px;
+      display: flex;
+      justify-content: center;
+      }
+
+      .custom-btn {
+      width: 50%; /* Aumenta el ancho en un 10% */
+      }
+
+    </style>
+    <div class="card text-center" style="width: 70%; margin: 5% auto;">
+      <div class="card-body">
+          <h3 class="card-title">Datos del Autor</h3>
+          <form method="post" action="{% url 'editar_autor' autor.id %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row">
+                  <div class="col-md-12">
+                      {{ form }}
+                  </div>
+                  <div class="col-md-6">
+                      <h3></h3>
+                      <h3></h3>
+                  </div>
+                  <div class="col-12 mt-3">
+                    <a href="{% url 'perfiladmin' %}" class="btn btn-danger custom-btn" style="width: 45%; margin-left: 10px;">Volver atrás</a>
+                    <button type="submit" class="btn btn-primary custom-btn" style="width: 45%;">Confirmar cambios</button>
+                  </div>
+              </div>
+          </form>
+      </div>
     </div>
+
     {% endblock content %}
 </body>
 </html>

@@ -59,6 +59,8 @@ urlpatterns = [
     path('editar_comentario/<int:comentario_id>/', views.editar_comentario, name='editarComentario'),
     path('reportar/post/<int:post_id>/', views.crear_reporte, name='reportar_post'),
     path('reportar/comentario/<int:comentario_id>/', views.crear_reporte_comentario, name='reportar_comentario'),
+    path('reportes/', views.listar_reportes, name='listar_reportes'),
+    path('reportes/<int:reporte_id>/', views.detalle_reporte, name='detalle_reporte'),
 
 
 

@@ -6,7 +6,36 @@
 <body>
   {% block content %}
     <!--Navbar heredado-->
-    <h5 class="text-center" style="margin-top: 20px;margin-bottom: 20px;">Lista de Libros para eliminar</h5>
+    <style>
+      .rounded-image {
+      border-radius: 50%;
+      display: block;
+      margin: auto;
+      width: 200px; /* Ajusta el tamaño según tus preferencias */
+      }
+
+      body {
+      background-color: rgb(151, 199, 238); 
+      }
+
+      .nav-tabs {
+      background-color: #0073ff; 
+      border: 1px solid rgb(0, 140, 255);
+      border-radius: 25px;
+      display: flex;
+      justify-content: center;
+      }
+
+      .custom-btn {
+      width: 50%; /* Aumenta el ancho en un 10% */
+      }
+
+    </style>
+    <div class="card text-center" style="width: 70%; margin: 5% auto;">
+      <div class="card-body">
+          <h5 class="card-title">Lista de Libros para eliminar</h5>
+      </div>
+    </div>
     <label class="container-fluid" style="margin-top: 20px;margin-bottom: 50px;"><!-- Lista de productos -->
     <div class="list-group">
         {% for libro in libros %}

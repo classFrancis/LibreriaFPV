@@ -122,3 +122,9 @@ class ReporteForm(forms.ModelForm):
         fields=('motivoReporte',)
 
     motivoReporte=forms.CharField(max_length=250,widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Explica tu reporte'}),label='')
+
+#Cambiar estado reporte
+class CambiarEstadoReporteForm(forms.ModelForm):
+    class Meta:
+        model = Reporte
+        fields = ['estadoReporte']

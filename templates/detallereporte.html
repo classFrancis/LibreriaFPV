@@ -1,0 +1,82 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+
+<head>
+  <title>{% block title %}Libro{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    <!--Navbar heredado-->
+    <style>
+      .rounded-image {
+      border-radius: 50%;
+      display: block;
+      margin: auto;
+      width: 200px; /* Ajusta el tamaño según tus preferencias */
+      }
+
+      body {
+      background-color: rgb(151, 199, 238); 
+      }
+
+      .nav-tabs {
+      background-color: #0073ff; 
+      border: 1px solid rgb(0, 140, 255);
+      border-radius: 25px;
+      display: flex;
+      justify-content: center;
+      }
+
+      .custom-btn {
+      width: 50%; /* Aumenta el ancho en un 10% */
+      background-color: #0073ff;
+      justify-content: center;
+      }
+
+    </style>
+        <label class="d-flex align-items-center justify-content-center full-height " style="margin-top: 50px;">
+            <label class="card" style="width: 50rem;">
+                <div class="card-body">
+                    <h2>Detalle del Reporte</h2>
+                    <p style="margin: 15px;">Motivo: {{ reporte.motivoReporte }}</p>
+                    <p style="margin: 15px;">Estado: {{ reporte.estadoReporte }}</p>
+                    <!-- Mostrar detalles del comentario o post -->
+                    {% if reporte.comentario %}
+                        <p style="margin: 15px;">Comentario: {{ reporte.comentario.contenidoComentario }}</p>
+                        <p style="margin: 15px;">Autor: {{ reporte.comentario.usuario.username }}</p>
+                        <!-- Botones para acciones -->
+                        <a href="{% url 'eliminarComentario' reporte.comentario.id %}" class="btn btn-outline-danger" >Eliminar Comentario</a>
+                        <a href="{% url 'banear_usuario' reporte.comentario.usuario.id %}" class="btn btn-outline-danger">Banear Usuario</a>
+                    {% elif reporte.post %}
+                        <p style="margin: 15px;">Post: {{ reporte.post.contenidoPost }}</p>
+                        <p style="margin: 15px;">Autor: {{ reporte.post.usuario.username }}</p>
+                        <!-- Botones para acciones -->
+                        <a href="{% url 'eliminarPublicacion' reporte.post.id %}" class="btn btn-outline-danger">Eliminar Post</a>
+                        <a href="{% url 'banear_usuario' reporte.post.usuario.id %}" class="btn btn-outline-danger">Banear Usuario</a>
+                    {% endif %}
+                
+                    <!-- Formulario para cambiar estado del reporte -->
+                    <form method="post" style="margin: 15px;">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-outline-success" type="submit">Cambiar Estado</button>
+                    </form>
+                </div>
+            </label>
+        </label>
+    <div class="container-fluid text-center"><!-- Grid para un boton de volver atras -->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'listar_reportes' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+    </div>
+    {% endblock content %}
+</body>
+</html>

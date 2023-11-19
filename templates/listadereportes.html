@@ -1,0 +1,67 @@
+{% extends "navbarperfiles.html" %}
+{% load static %}
+<head>
+  <title>{% block title %}Autores registrados{% endblock %}</title>
+</head>
+<body>
+  {% block content %}
+  <!--Navbar heredado-->
+  <style>
+    .rounded-image {
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+    width: 200px; /* Ajusta el tamaño según tus preferencias */
+    }
+
+    body {
+    background-color: rgb(151, 199, 238); 
+    }
+
+    .nav-tabs {
+    background-color: #0073ff; 
+    border: 1px solid rgb(0, 140, 255);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    }
+
+    .custom-btn {
+    width: 50%; /* Aumenta el ancho en un 10% */
+    background-color: #0073ff;
+    justify-content: center;
+    }
+
+  </style>
+      <h2>Listado de Reportes</h2>
+      <div class="list-group">
+          {% for reporte in reportes %}
+                <a href="{% url 'detalle_reporte' reporte.id %}" class="list-group-item list-group-item-action">
+                    <li>Usuario que reporta: {{ reporte.usuario }}</li>
+                    <li>Reporte de comentario: {{ reporte.comentario }}</li>
+                    <li>Reporte de post: {{ reporte.post }}</li>
+                    <li>Reporte ID: {{ reporte.id }}</li> 
+                    <li>Motivo: {{ reporte.motivoReporte }}</li>
+                    <li>Estado: {{ reporte.estadoReporte }}</li>
+                </a>
+          {% empty %}
+              <p>No hay reportes.</p>
+          {% endfor %}
+      </div>
+    </div>
+    <div class="container-fluid text-center"><!-- Grid para el  boton de volver al inicio-->
+        <div class="row">
+          <div class="col">
+            <!-- ?-->
+          </div>
+          <div class="col">
+            <!-- ? -->
+          </div>
+          <div class="col">
+            <a href="{% url 'perfiladmin' %}" class="btn btn-danger" style="margin-top: 50px;margin-bottom: 50px;">Volver atras</a>
+          </div>
+        </div>
+      </div>
+      {% endblock content %}
+</body>
+</html>

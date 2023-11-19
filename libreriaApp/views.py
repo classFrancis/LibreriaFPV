@@ -508,3 +508,30 @@ def crear_reporte_comentario(request,comentario_id=None):
         form=ReporteForm()
 
     return render(request,'reporteformcomentario.html',{'form': form,'comentario':comentario})
+
+#Ver lista de reportes
+@login_required
+def listar_reportes(request):
+    reportes = Reporte.objects.all()
+    return render(request, 'listadereportes.html', {'reportes': reportes})
+
+#Detalle reporte
+@login_required
+def detalle_reporte(request, reporte_id):
+    reporte = get_object_or_404(Reporte, pk=reporte_id)
+
+    # Formulario para cambiar el estado del reporte
+    if request.method == 'POST':
+        form = CambiarEstadoReporteForm(request.POST, instance=reporte)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Estado del reporte actualizado")
+            return redirect('detalle_reporte', reporte_id=reporte_id)
+    else:
+        form = CambiarEstadoReporteForm(instance=reporte)
+
+    contexto = {
+        'reporte': reporte,
+        'form': form,
+    }
+    return render(request, 'detallereporte.html', contexto)
