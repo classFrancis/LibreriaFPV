@@ -61,6 +61,7 @@ urlpatterns = [
     path('reportar/comentario/<int:comentario_id>/', views.crear_reporte_comentario, name='reportar_comentario'),
     path('reportes/', views.listar_reportes, name='listar_reportes'),
     path('reportes/<int:reporte_id>/', views.detalle_reporte, name='detalle_reporte'),
+    path('notificaciones/<int:notificacion_id>/', views.detalle_notificacion, name='detalle_notificacion'),
 
 
 

@@ -20,7 +20,40 @@
             </div>
             <div>
                 <a class="btn btn-outline-success" href="{% url 'logout' %}" type="submit">Cerrar sesion</a>
-                <a class="btn btn-outline-success bi bi-bell" href="#" type="submit"></a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-success bi bi-bell" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Notificaciones</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <!-- aca van las notificaciones-->
+                                {% if notificaciones %}
+                                    {% for notificacion in notificaciones %}
+                                           
+                                            <a href="{% url 'detalle_notificacion' notificacion.id %}" class="list-group-item list-group-item-action">
+                                                <li>{{ notificacion.mensajeNotificacion }}</li>
+                                                <li>Tipo: {{ notificacion.tipoNotificacion }}</li>
+                                            </a>
+                                            
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No hay notificaciones .</p>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!--End modal-->
             </div>
         </div>
     </nav>

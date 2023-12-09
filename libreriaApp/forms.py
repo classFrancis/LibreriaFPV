@@ -128,3 +128,4 @@ class CambiarEstadoReporteForm(forms.ModelForm):
     class Meta:
         model = Reporte
         fields = ['estadoReporte']
+

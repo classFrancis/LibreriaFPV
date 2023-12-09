@@ -87,6 +87,18 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'railway',
+        'HOST':'monorail.proxy.rlwy.net',
+        'USER':'root',
+        'PASSWORD':'hEBgfAab52B4CcFhBbec4AFedAG1dgE4',
+        'PORT': 12524
+
+    }
+}
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'libreria1',
         'USER':'root',
         'PASSWORD':'2412',
@@ -94,8 +106,7 @@ DATABASES = {
 
     }
 }
-
-
+'''
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

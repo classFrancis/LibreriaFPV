@@ -257,6 +257,7 @@ def registro_perfil(request):
 def perfil(request):
     perfil_usuario, created = Perfil.objects.get_or_create(usuario=request.user)
     context = {'perfil': perfil_usuario,'usuario':request.user}
+    
     return render(request,'perfil.html',context)
 
 #Ver perfil como admin
@@ -270,7 +271,8 @@ def ver_perfil_como_admin(request, perfil_id):
 @admin_only
 @login_required(login_url='login')
 def perfil_admin(request):
-    return render(request,'perfilAdmin.html')
+    notificaciones = Notificacion.objects.filter(usuario=request.user)
+    return render(request,'perfilAdmin.html',{'notificaciones': notificaciones})
 
 #Login al sistema
 def login_usuario(request):
@@ -470,24 +472,35 @@ def editar_comentario(request, comentario_id):
     return render(request, 'editarComentario.html', {'form': form})
 
 #Crear reporte asociado a post y usuario
-def crear_reporte(request,post_id=None):
-    usuario_reportante=request.user
-    post=None
+def crear_reporte(request, post_id=None):
+    usuario_reportante = request.user
+    post = get_object_or_404(Post, pk=post_id) if post_id else None
 
-    if post_id:
-        post=get_object_or_404(Post,pk=post_id)
-    if request.method=='POST':
-        form=ReporteForm(request.POST)
+    if request.method == 'POST':
+        form = ReporteForm(request.POST)
         if form.is_valid():
-            reporte=form.save(commit=False)
-            reporte.usuario=usuario_reportante
-            reporte.post=post
+            reporte = form.save(commit=False)
+            reporte.usuario = usuario_reportante
+            reporte.post = post
             reporte.save()
+
+            # Enviar notificaciones a todos los administradores
+            # Utiliza tu modelo personalizado Usuario
+            administradores = Usuario.objects.filter(is_superuser=True)
+            for admin in administradores:
+                notificacion = Notificacion(
+                    usuario=admin,
+                    post=reporte.post,
+                    tipoNotificacion='REPORTE',
+                    mensajeNotificacion=f'Titulo Post: {reporte.post.tituloPost}'
+                )
+                notificacion.save()
+
             return redirect('publicacion')
     else:
-        form=ReporteForm()
+        form = ReporteForm()
 
-    return render(request,'reporteform.html',{'form': form,'post': post})
+    return render(request, 'reporteform.html', {'form': form, 'post': post})
 
 #Crear reporte asociado a comentarioy usuario
 def crear_reporte_comentario(request,comentario_id=None):
@@ -503,9 +516,21 @@ def crear_reporte_comentario(request,comentario_id=None):
             reporte.usuario=usuario_reportante
             reporte.comentario=comentario
             reporte.save()
+
+            administradores = Usuario.objects.filter(is_superuser=True)
+            for admin in administradores:
+                notificacion = Notificacion(
+                    usuario=admin,
+                    post=reporte.post,
+                    tipoNotificacion='REPORTE',
+                    mensajeNotificacion=f'Autor comentario: {reporte.comentario.contenidoComentario}'
+                )
+                notificacion.save()
+
             return redirect('publicacion')
     else:
-        form=ReporteForm()
+        form = ReporteForm()
+    
 
     return render(request,'reporteformcomentario.html',{'form': form,'comentario':comentario})
 
@@ -533,5 +558,33 @@ def detalle_reporte(request, reporte_id):
     contexto = {
         'reporte': reporte,
         'form': form,
+    }
+    return render(request, 'detallereporte.html', contexto)
+
+@login_required
+def detalle_notificacion(request, notificacion_id):
+    notificacion = get_object_or_404(Notificacion, pk=notificacion_id)
+    reporte = None
+    if notificacion.post:
+        reporte = Reporte.objects.filter(post=notificacion.post).first()
+    elif notificacion.comentario:
+        reporte = Reporte.objects.filter(comentario=notificacion.comentario).first()
+
+    if reporte:
+        if request.method == 'POST':
+            form = CambiarEstadoReporteForm(request.POST, instance=reporte)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Estado del reporte actualizado")
+                return redirect('detalle_reporte', reporte_id=reporte.id)
+        else:
+            form = CambiarEstadoReporteForm(instance=reporte)
+    else:
+        form = None  # No hay reporte relacionado
+
+    contexto = {
+        'notificacion': notificacion,
+        'form': form,
+        'reporte': reporte
     }
     return render(request, 'detallereporte.html', contexto)
