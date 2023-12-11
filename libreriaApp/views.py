@@ -256,9 +256,7 @@ def registro_perfil(request):
 @login_required(login_url='login')
 def perfil(request):
     perfil_usuario, created = Perfil.objects.get_or_create(usuario=request.user)
-    context = {'perfil': perfil_usuario,'usuario':request.user}
-    
-    return render(request,'perfil.html',context)
+    return render(request,'perfil.html',{'perfil': perfil_usuario,'usuario':request.user,'en_perfil': True})
 
 #Ver perfil como admin
 @admin_only
@@ -272,7 +270,7 @@ def ver_perfil_como_admin(request, perfil_id):
 @login_required(login_url='login')
 def perfil_admin(request):
     notificaciones = Notificacion.objects.filter(usuario=request.user)
-    return render(request,'perfilAdmin.html',{'notificaciones': notificaciones})
+    return render(request,'perfilAdmin.html',{'notificaciones': notificaciones,'en_perfil': True})
 
 #Login al sistema
 def login_usuario(request):
@@ -306,6 +304,7 @@ def login_usuario(request):
         
     return render(request,'login.html',{'form':form,'user_message':user_message})
 
+    
 #Cerrar sesion de usuario
 def cerrar_sesion(request):
     logout(request)
@@ -385,7 +384,8 @@ def publicacion(request):
                 'form': form, 
                 'publicaciones': publicaciones, 
                 'comentarios': comentarios, 
-                'form_comentario': form_comentario
+                'form_comentario': form_comentario,
+                'en_foro': True
             })
     else:
         form = PostForm()
@@ -396,7 +396,8 @@ def publicacion(request):
             'form': form, 
             'publicaciones': publicaciones, 
             'comentarios': comentarios, 
-            'form_comentario': form_comentario
+            'form_comentario': form_comentario,
+            'en_foro': True
         })
 
 #crear comentario
@@ -503,36 +504,39 @@ def crear_reporte(request, post_id=None):
     return render(request, 'reporteform.html', {'form': form, 'post': post})
 
 #Crear reporte asociado a comentarioy usuario
-def crear_reporte_comentario(request,comentario_id=None):
-    usuario_reportante=request.user
-    comentario=None
+def crear_reporte_comentario(request, comentario_id=None):
+    usuario_reportante = request.user
 
     if comentario_id:
-        comentario=get_object_or_404(Comentario,pk=comentario_id)
-    if request.method=='POST':
-        form=ReporteForm(request.POST)
+        comentario = get_object_or_404(Comentario, pk=comentario_id)
+    else:
+        # Si no hay comentario_id, posiblemente quieras redirigir o manejar este caso.
+        return redirect('alguna_url_para_manejar_este_caso')
+
+    if request.method == 'POST':
+        form = ReporteForm(request.POST)
         if form.is_valid():
-            reporte=form.save(commit=False)
-            reporte.usuario=usuario_reportante
-            reporte.comentario=comentario
+            reporte = form.save(commit=False)
+            reporte.usuario = usuario_reportante
+            reporte.comentario = comentario
             reporte.save()
 
             administradores = Usuario.objects.filter(is_superuser=True)
             for admin in administradores:
                 notificacion = Notificacion(
                     usuario=admin,
-                    post=reporte.post,
+                    comentario=comentario,  # Asegúrate de asignar el comentario aquí
                     tipoNotificacion='REPORTE',
-                    mensajeNotificacion=f'Autor comentario: {reporte.comentario.contenidoComentario}'
+                    mensajeNotificacion=f'Comentario: {reporte.comentario.contenidoComentario}'
                 )
                 notificacion.save()
 
             return redirect('publicacion')
     else:
         form = ReporteForm()
-    
 
-    return render(request,'reporteformcomentario.html',{'form': form,'comentario':comentario})
+    return render(request, 'reporteformcomentario.html', {'form': form, 'comentario': comentario})
+
 
 #Ver lista de reportes
 @login_required
@@ -561,6 +565,7 @@ def detalle_reporte(request, reporte_id):
     }
     return render(request, 'detallereporte.html', contexto)
 
+#Detalle notificaciones
 @login_required
 def detalle_notificacion(request, notificacion_id):
     notificacion = get_object_or_404(Notificacion, pk=notificacion_id)
@@ -588,3 +593,34 @@ def detalle_notificacion(request, notificacion_id):
         'reporte': reporte
     }
     return render(request, 'detallereporte.html', contexto)
+
+#puntuar publicacion
+@login_required
+def puntuar_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    try:
+        puntuacion_usuario = Puntuacion.objects.get(usuario=request.user, post=post)
+    except Puntuacion.DoesNotExist:
+        puntuacion_usuario = None
+
+    if request.method == 'POST':
+        form = PuntuarPostForm(request.POST, instance=puntuacion_usuario)
+        if form.is_valid():
+            puntuacion_usuario = form.save(commit=False)
+            puntuacion_usuario.usuario = request.user
+            puntuacion_usuario.post = post
+            puntuacion_usuario.save()
+
+            # Actualizar la puntuación promedio del post
+            puntuacion_promedio = post.puntuaciones.aggregate(models.Avg('puntuacion'))['puntuacion__avg']
+            post.puntuacion = puntuacion_promedio
+            post.save()
+            return redirect('publicacion')
+    else:
+        if puntuacion_usuario is not None:
+            form = PuntuarPostForm(instance=puntuacion_usuario)
+        else:
+            form = PuntuarPostForm()
+
+    return render(request, 'puntuarPost.html', {'form': form, 'post': post})

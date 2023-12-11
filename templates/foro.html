@@ -19,11 +19,17 @@
                             {% endif %}
                         </div>
                         <div class="text-container " style="margin-bottom: 100px ;">
-                            <p>Titulo Post: {{ publicacion.tituloPost }}</p>
+                            <p>Titulo Post: {{ publicacion.tituloPost|capfirst }}</p>
                             <p>Autor Post: {{ publicacion.usuario.username }}</p>
-                            <p>Libro asociado: {{ publicacion.libroAsociado.titulo }}</p>
-                            <p>Autor libro: {{ publicacion.libroAsociado.autorlibro.nombreAutor }} {{ publicacion.libroAsociado.autorlibro.apellidoAutor }}</p>
-                            <p>Tematica del libro: {{ publicacion.libroAsociado.tematica }}</p>
+                            <p>Libro asociado: {{ publicacion.libroAsociado.titulo|capfirst }}</p>
+                            <p>Autor libro: {{ publicacion.libroAsociado.autorlibro.nombreAutor|capfirst }} {{ publicacion.libroAsociado.autorlibro.apellidoAutor|capfirst }}</p>
+                            <p>Tematica del libro: {{ publicacion.libroAsociado.tematica|capfirst }}</p>
+                            <p>Puntuacion: {{ publicacion.puntuacion }}/5
+                                <i class="bi bi-star"></i>
+                            </p>
+                            <p>
+                                <a href="{% url 'puntuar_post' publicacion.id %}" class="btn btn-outline-warning" style="border-radius: 20px;">Puntuar</a>
+                            </p>
                         </div>
                     {% endfor %}
                 </div>
@@ -36,7 +42,8 @@
                         
                             {% for publicacion in publicaciones %}
                                 <div class="contenedorPublicacion">
-                                    {{ publicacion.contenidoPost }}
+                                    <h3 style="margin-bottom: 20px; ">{{ publicacion.tituloPost|capfirst }}</h3>
+                                    {{ publicacion.contenidoPost|capfirst }}
                                     {% if publicacion.usuario == user or user.is_superuser %}
                                     <!-- Button trigger modal -->
                                         <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#avisoModalPost">
@@ -86,7 +93,7 @@
                                                 <div>
                                                     {% for comentario in publicacion.comentario_set.all %}
                                                         <div class="comentarioIndividual">
-                                                            <strong>{{ comentario.usuario.username }}</strong>: {{ comentario.contenidoComentario }}
+                                                            <strong>{{ comentario.usuario.username }}</strong>: {{ comentario.contenidoComentario|capfirst }}
                                                             
                                                             <!-- PARA ELIMINAR COMENTARIO-->
                                                             {% if comentario.usuario == user or user.is_superuser %}

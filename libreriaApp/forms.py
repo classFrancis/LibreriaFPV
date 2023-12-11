@@ -16,12 +16,11 @@ class UsuarioLoginForm(AuthenticationForm):
 class UsuarioRegistroForm(UserCreationForm):
     class Meta:
         model=Usuario
-        fields=('first_name','last_name','email','rut','username')
+        fields=('first_name','last_name','email','username')
     
     first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre'}),label="")    
     last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Apellido'}),label="")  
-    email=forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'}),label="")  
-    rut=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'rut'}),label="")
+    email=forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'}),label="")
     username=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de Usuario'}),label="")
     password1=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}),label="")
     password2=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirmar Password'}),label="")
@@ -129,3 +128,11 @@ class CambiarEstadoReporteForm(forms.ModelForm):
         model = Reporte
         fields = ['estadoReporte']
 
+#Puntuar post
+class PuntuarPostForm(forms.ModelForm):
+    class Meta:
+        model = Puntuacion
+        fields = ['puntuacion']
+        widgets = {
+            'puntuacion': forms.NumberInput(attrs={'min': '0', 'max': '5', 'step': '0.01'})
+        }

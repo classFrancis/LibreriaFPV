@@ -62,6 +62,8 @@ urlpatterns = [
     path('reportes/', views.listar_reportes, name='listar_reportes'),
     path('reportes/<int:reporte_id>/', views.detalle_reporte, name='detalle_reporte'),
     path('notificaciones/<int:notificacion_id>/', views.detalle_notificacion, name='detalle_notificacion'),
+    path('puntuarPost/<int:post_id>/', views.puntuar_post, name='puntuar_post'),
+
 
 
 

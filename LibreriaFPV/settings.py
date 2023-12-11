@@ -84,6 +84,7 @@ MEDIA_URL = '/media/'
 import pymysql
 pymysql.install_as_MySQLdb()
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -96,17 +97,18 @@ DATABASES = {
     }
 }
 '''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'libreria1',
+        'NAME': 'libreria2',
         'USER':'root',
         'PASSWORD':'2412',
         'PORT': 3306
 
     }
 }
-'''
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

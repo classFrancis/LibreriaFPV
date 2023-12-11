@@ -38,7 +38,7 @@
             <label class="card" style="width: 50rem;">
                 <div class="card-body">
                     <h2>Detalle del Reporte</h2>
-                    <p style="margin: 15px;">Motivo: {{ reporte.motivoReporte }}</p>
+                    <p style="margin: 15px;">Motivo del reporte: {{ reporte.motivoReporte }}</p>
                     <p style="margin: 15px;">Estado: {{ reporte.estadoReporte }}</p>
                     <!-- Mostrar detalles del comentario o post -->
                     {% if reporte.comentario %}
@@ -48,8 +48,9 @@
                         <a href="{% url 'eliminarComentario' reporte.comentario.id %}" class="btn btn-outline-danger" >Eliminar Comentario</a>
                         <a href="{% url 'banear_usuario' reporte.comentario.usuario.id %}" class="btn btn-outline-danger">Banear Usuario</a>
                     {% elif reporte.post %}
-                        <p style="margin: 15px;">Post: {{ reporte.post.contenidoPost }}</p>
-                        <p style="margin: 15px;">Autor: {{ reporte.post.usuario.username }}</p>
+                        <p style="margin: 15px;">Titulo del Post: "{{ reporte.post.tituloPost }}"</p>
+                        <p style="margin: 15px;">Contenido del Post: "{{ reporte.post.contenidoPost }}"</p>
+                        <p style="margin: 15px;">Autor del post reportado: {{ reporte.post.usuario.username }}</p>
                         <!-- Botones para acciones -->
                         <a href="{% url 'eliminarPublicacion' reporte.post.id %}" class="btn btn-outline-danger">Eliminar Post</a>
                         <a href="{% url 'banear_usuario' reporte.post.usuario.id %}" class="btn btn-outline-danger">Banear Usuario</a>

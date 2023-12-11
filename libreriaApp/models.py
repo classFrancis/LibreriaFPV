@@ -3,10 +3,11 @@ del sistema"""
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
   
 # Create your models here.
 class Usuario(AbstractUser):
-    rut=models.CharField(max_length=10,unique=True)
+    rut=models.CharField(max_length=12,unique=True,null=True,blank=True)
 
 class Autor(models.Model):
     nombreAutor=models.CharField(max_length=150)
@@ -55,6 +56,18 @@ class Post(models.Model):
     libroAsociado=models.ForeignKey(Libro,on_delete=models.SET_NULL,null=True)
     timestampPost=models.DateTimeField(auto_now_add=True)
     modificacion_timestampPost=models.DateField(auto_now=True)
+    puntuacion=models.DecimalField(max_digits=3,decimal_places=2,default=0)
+
+    def __str__(self):
+        return f'Titulo del post "{self.tituloPost}"'
+
+class Puntuacion(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='puntuaciones')
+    puntuacion = models.DecimalField(max_digits=3, decimal_places=2)
+
+    class Meta:
+        unique_together = ('usuario', 'post')
 
 class Comentario(models.Model):
     usuario=models.ForeignKey(Usuario,on_delete=models.CASCADE)
@@ -62,6 +75,10 @@ class Comentario(models.Model):
     contenidoComentario=models.TextField(max_length=1000)
     timestampComentario=models.DateTimeField(auto_now_add=True)
     modificacion_timestampComentario=models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f'Comentario de {self.usuario.username} en el post "{self.post.tituloPost}"'
+
 
 class Reporte(models.Model):
     ESTADOS=(
